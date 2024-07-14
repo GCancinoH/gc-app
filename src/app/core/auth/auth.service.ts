@@ -30,6 +30,15 @@ export class AuthService {
     try {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       const { user } = userCredential;
+
+      if (!user.emailVerified) {
+        let err = "Tu correo aún no está verificado. Por favor, verifica tu correo."
+        return {
+          success: false,
+          error: err
+        };
+      }
+
       let idToken = '';
       idToken = await user.getIdToken();
       // Handle the http request

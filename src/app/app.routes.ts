@@ -18,6 +18,10 @@ export const routes: Routes = [
     {
         path: 'auth/next-steps',
         loadComponent: () => import('./ui/auth/next-steps/next-steps.component').then(c => c.NextStepsComponent),
+    },
+    {
+        path: 'auth/authenticate',
+        loadComponent: () => import('./ui/auth/authenticate/authenticate.component').then(c => c.AuthenticateComponent)
     }
 
 ];

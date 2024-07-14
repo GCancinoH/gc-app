@@ -90,12 +90,12 @@ export class AuthComponent implements OnInit {
           console.log(res);
           this.isLoading.set(false);
           this.snackBar.open("Signed In Successfully!", 'X', {
-            duration: 250
+            duration: 5000
           })
           this.router.navigate(['/u/dashboard']);
         } else {
           console.log(res);
-          this.snackBar.open(res.error!, 'X', {duration: 250});
+          this.snackBar.open(res.error!, 'X', {duration: 5000});
           this.isLoading.set(false);
           this.loginForm.enable();
         }
@@ -113,6 +113,7 @@ export class AuthComponent implements OnInit {
 
     this.authSrv.createNewPatient(email, password, name).subscribe(res => {
       if (res.success) {
+        console.log(res);
         this.snackBar.open("Usuario Registrado Exitosamente", 'X', { duration: 3000})
       } else {
         this.snackBar.open(res.message!, 'X', { duration: 3000})

@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { map, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { user } from '@angular/fire/auth';
+import { User, user } from '@angular/fire/auth';
 
 export const userGuard: CanActivateFn = (route, state) => {
   //return true;
@@ -14,7 +14,7 @@ export const userGuard: CanActivateFn = (route, state) => {
   return authSrv.authState$.pipe(
     takeUntilDestroyed(destroyRef)
   ).subscribe((user: any) => {
-    if(user) {
+    if(user && user.emailVerified) {
       router.navigate(['/u/dashboard']);
       return true;
     } else {
