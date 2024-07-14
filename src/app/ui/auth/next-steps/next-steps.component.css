@@ -1,0 +1,29 @@
+.ns-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.ns-card {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    padding: 16px;
+}
+.ns-btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.ns-btn-wrapper button {
+    background-color: #8B0000 !important;
+    color: white !important;
+}
+.ns-input-fullwidth { width: 100%;}
+.mt10 { margin-top: 10px; }
+.mt20 { margin-top: 20px; }
+.mb10 { margin-bottom: 10px; }
+.mb20 { margin-bottom: 20px; }

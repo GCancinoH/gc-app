@@ -1,0 +1,116 @@
+<section class="auth-card-wrapper">
+  <!-- Lenguajes -->
+  <div class="auth-lang">
+    <button mat-icon-button [mat-menu-trigger-for]="langMenu">
+      <mat-icon>language</mat-icon>
+    </button>
+    <mat-menu #langMenu="matMenu">
+      <button mat-menu-item (click)="onChangeLanguage('en')">
+        <mat-icon svgIcon="lang-us"></mat-icon>
+        English
+      </button>
+      <button mat-menu-item (click)="onChangeLanguage('es')">
+        <mat-icon svgIcon="lang-mx"></mat-icon>
+        Español
+      </button>
+    </mat-menu>
+  </div> <!-- End of Lenguajes -->
+  <!-- Login/Register Card -->
+  <mat-card class="auth-card">
+    <div class="auth-change-wrapper">
+        <button mat-raised-button style="width: 100%;" [disabled]="isSignInActive()" (click)="activateSignIn()">
+          {{'auth.signin-choose' | translate }}
+        </button>
+        <button mat-raised-button style="width: 100%;" [disabled]="isSignUpActive()" (click)="activateSignUp()">
+          {{'auth.signup-choose' | translate }}
+        </button>            
+    </div>
+    @if(isSignInActive()) {
+      <span class="auth-card-title">{{'auth.login.welcome-msg' | translate}}</span>
+      <!-- Google Sign In -->
+      <button 
+        mat-flat-button 
+        class="auth-google-btn elevation-4"
+        (click)="onGoogleSignIn()"
+      >
+        <fa-icon [icon]="googleIcn"></fa-icon>
+        <span class="auth-google-text">{{'auth.login.google-signin' | translate}}</span>
+      </button>
+      <span class="or-divider">{{'auth.login.or-divider' | translate}}</span>
+      <form [formGroup]="loginForm" class="auth-form" 
+        (ngSubmit)="onSignIn()"
+      >
+        <mat-form-field appearance="outline" class="auth-input">
+          <mat-label>{{ 'auth.login.email-field' | translate }}</mat-label>
+          <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
+          <mat-icon matSuffix>alternate_email</mat-icon>
+          @if(loginForm.get('email')?.hasError('required')) {
+            <mat-error>Email is <strong>required</strong></mat-error>
+          }
+          @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+            <mat-error>Email is <strong>invalid</strong></mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="margin-bottom: 10px;">
+          <mat-label>{{ 'auth.login.pass-field' | translate }}</mat-label>
+          <input matInput formControlName="password" type="password">
+          <mat-icon matSuffix>key</mat-icon>
+          @if(loginForm.get('password')?.hasError('required')) {
+            <mat-error>Password is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <!-- Sign In Button -->
+        <button mat-flat-button class="auth-signin-btn">
+          @if(isLoading() === false) {
+            {{ 'auth.login.signin-btn' | translate }}
+          } @else {
+            <span class="loader"></span>
+          }
+        </button>
+        <!-- Forgot Password Button -->
+        <div class="auth-forgotPass-wrapper">
+          <button mat-button style="color: black;">{{'auth.login.forgot-pass' | translate}}</button>
+        </div>
+      </form>        
+    } @else {
+      <span class="auth-card-title">{{'auth.register.welcome-msg' | translate }}</span>
+      <!-- Google Sign In -->
+      <button 
+        mat-flat-button 
+        class="auth-google-btn elevation-4"
+        (click)="onGoogleSignIn()"
+      >
+        <fa-icon [icon]="googleIcn"></fa-icon>
+        <span class="auth-google-text">{{'auth.register.google-signup' | translate }}</span>
+      </button>
+      <span class="or-divider">{{'auth.register.or-divider' | translate}}</span>
+        <form [formGroup]="registerForm" class="auth-form" (ngSubmit)="onSignUp()">
+            <mat-form-field appearance="outline" class="auth-input">
+                <mat-label>{{'auth.register.name-field' | translate}}</mat-label>
+                <input matInput placeholder="John Doe" formControlName="fullName" type="text">
+                <mat-icon matSuffix>person</mat-icon>
+                <!--<mat-hint>Hint</mat-hint>-->
+              </mat-form-field>
+            <mat-form-field appearance="outline" class="auth-input">
+                <mat-label>{{'auth.register.email-field' | translate}}</mat-label>
+                <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
+                <mat-icon matSuffix>alternate_email</mat-icon>
+                <!--<mat-hint>Hint</mat-hint>-->
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="margin-bottom: 10px;">
+                <mat-label>{{'auth.register.pass-field' | translate}}</mat-label>
+                <input matInput formControlName="password" type="password">
+                <mat-icon matSuffix>key</mat-icon>
+                <!--<mat-hint>Hint</mat-hint>-->
+              </mat-form-field>
+              <button mat-flat-button class="auth-signin-btn">
+                @if(isLoading() === false) {
+                  {{ 'auth.register.signup-btn' | translate }}
+                } @else {
+                  <span class="loader"></span>
+                }
+              </button>
+        </form>
+    }
+  </mat-card>
+</section>

@@ -1,0 +1,81 @@
+<section class="ns-wrapper">
+    <mat-card class="ns-card">
+        <mat-card-header>
+            <mat-card-title>Next Steps</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="mt20">
+            <form [formGroup]="nsForm" (ngSubmit)="onSubmit()">
+                <!-- Step 1 -->
+                @if (steps() === 1) {
+                    <mat-form-field appearance="outline" class="ns-input-fullwidth">
+                        <mat-label>What's your age?</mat-label>
+                        <input matInput 
+                            placeholder="30"
+                            formControlName="age"
+                            type="number"
+                        >
+                    </mat-form-field>
+                    @if (isCurrentStepValid()) {
+                        <div class="ns-btn-wrapper">
+                            <button mat-button (click)="nextStep()">Next</button>
+                        </div>
+                    }
+                }
+                <!-- Step 2 -->
+                @if (steps() === 2) {
+                    <mat-form-field appearance="outline" class="ns-input-fullwidth">
+                        <mat-label>What's your height (in cm)?</mat-label>
+                        <input matInput 
+                            placeholder="165.4"
+                            formControlName="height"
+                            type="number"
+                            step="0.01"
+                        >
+                    </mat-form-field>
+                    @if (isCurrentStepValid()) {
+                        <div class="ns-btn-wrapper">
+                            <button mat-button (click)="prevStep()">Previous</button>
+                            <button mat-button (click)="nextStep()">Next</button>
+                        </div>                        
+                    }
+                }
+                <!-- Step 3 -->
+                @if (steps() === 3) {
+                    <mat-form-field appearance="outline" class="ns-input-fullwidth">
+                        <mat-label>What's your weight (in kg)?</mat-label>
+                        <input matInput 
+                            placeholder="60.8"
+                            formControlName="weight"
+                            type="number"
+                            step="0.01"
+                        >
+                    </mat-form-field>
+                    @if (isCurrentStepValid()) {
+                        <div class="ns-btn-wrapper">
+                            <button mat-button (click)="prevStep()">Previous</button>
+                            <button mat-button (click)="nextStep()">Next</button>
+                        </div>                        
+                    }
+                }
+                <!-- Step 4 -->
+                @if (steps() === 4) {
+                    <mat-form-field appearance="outline" class="ns-input-fullwidth">
+                        <mat-label>What's your gender?</mat-label>
+                        <mat-select>
+                          @for (gender of genderOptions; track gender) {
+                            <mat-option [value]="gender.value">{{gender.gender}}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    @if (isCurrentStepValid()) {
+                        <div class="ns-btn-wrapper">
+                            <button mat-button (click)="prevStep()">Previous</button>
+                            <button mat-button (click)="nextStep()">Next</button>
+                        </div>                        
+                    }
+                }
+            </form>
+        </mat-card-content>
+    </mat-card>
+</section>
+<!---->

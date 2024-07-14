@@ -1,0 +1,24 @@
+{
+  "auth": {
+    "signin-choose":"Sign In",
+    "signup-choose":"Sign Up",
+    "login": {
+      "signin-btn": "Access now!",
+      "email-field": "Email",
+      "pass-field": "Password",
+      "forgot-pass": "Forgot Password?",
+      "google-signin": "Sign in with Google",
+      "welcome-msg": "Welcome back",
+      "or-divider": "OR"
+    },
+    "register": {
+      "welcome-msg": "¡Hello there!",
+      "name-field": "Full Name",
+      "email-field": "Email",
+      "pass-field": "Password",
+      "signup-btn": "Join us!",
+      "google-signup": "Sign up with Google",
+      "or-divider": "OR"
+    }
+  }
+}

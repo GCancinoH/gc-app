@@ -1,0 +1,24 @@
+{
+  "auth": {
+    "signin-choose":"Logéate",
+    "signup-choose":"Regístrate",
+    "login": {
+      "signin-btn": "¡Accede ahora!",
+      "email-field": "Correo Electrónico",
+      "pass-field": "Contraseña",
+      "forgot-pass": "¿Olvidaste tu contraseña?",
+      "google-signin": "Logéate con Google",
+      "welcome-msg": "¡Bienvenido!",
+      "or-divider": "O"
+    },
+    "register": {
+      "welcome-msg": "¡Hola!",
+      "name-field": "Nombre Completo",
+      "email-field": "Correo Electrónico",
+      "pass-field": "Contraseña",
+      "signup-btn": "¡Únete ahora!",
+      "google-signup": "Regístrate con Google",
+      "or-divider": "O"
+    }
+  }
+}
