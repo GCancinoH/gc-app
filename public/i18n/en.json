@@ -9,7 +9,8 @@
       "forgot-pass": "Forgot Password?",
       "google-signin": "Sign in with Google",
       "welcome-msg": "Welcome back",
-      "or-divider": "OR"
+      "or-divider": "OR",
+      "email_not_verified": "Ypur have not verified your email. Verify it, please!"
     },
     "register": {
       "welcome-msg": "¡Hello there!",

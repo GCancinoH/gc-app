@@ -9,7 +9,8 @@
       "forgot-pass": "¿Olvidaste tu contraseña?",
       "google-signin": "Logéate con Google",
       "welcome-msg": "¡Bienvenido!",
-      "or-divider": "O"
+      "or-divider": "O",
+      "email_not_verified": "Tu correo aún no está verificado. Por favor, verifica tu correo."
     },
     "register": {
       "welcome-msg": "¡Hola!",
@@ -19,6 +20,9 @@
       "signup-btn": "¡Únete ahora!",
       "google-signup": "Regístrate con Google",
       "or-divider": "O"
+    },
+    "errors": {
+      
     }
   }
 }

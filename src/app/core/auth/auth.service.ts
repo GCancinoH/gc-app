@@ -7,6 +7,7 @@ import { Observable, Subscription, catchError, firstValueFrom, throwError } from
 import { AuthResponse } from './auth.interfaces';
 import { FirebaseError } from '@angular/fire/app';
 import { config } from '../const';
+import { TranslationService } from '../translation/translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class AuthService {
   httpClient = inject(HttpClient);
   authStateSubscription!: Subscription;
   destroyRef = inject(DestroyRef);
+  translator = inject(TranslationService);
   res!: AuthResponse;
 
   get userState(): User | null {
@@ -32,7 +34,8 @@ export class AuthService {
       const { user } = userCredential;
 
       if (!user.emailVerified) {
-        let err = "Tu correo aún no está verificado. Por favor, verifica tu correo."
+        let err = this.translator.getTranslation('auth.login.email_not_verified');
+        this.signOut()
         return {
           success: false,
           error: err
