@@ -35,7 +35,7 @@ export class AuthService {
 
       if (!user.emailVerified) {
         let err = this.translator.getTranslation('auth.login.email_not_verified');
-        this.signOut()
+        this.signOut();
         return {
           success: false,
           error: err
