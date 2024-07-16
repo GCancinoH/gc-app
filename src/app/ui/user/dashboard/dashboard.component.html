@@ -1,3 +1,6 @@
 <button (click)="onSignOut()">Logout</button>
+@if(isAdmin()) {
+    <button (click)="onSignOut()">Admin</button>
+} 
 <br />
 <pre>{{ user$ | async | json  }}</pre>

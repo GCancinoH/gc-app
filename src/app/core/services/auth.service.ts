@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, updateProfile } from '@angular/fire/auth';
+import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, IdTokenResult, idToken, getIdTokenResult } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription, catchError, firstValueFrom, throwError } from 'rxjs';
+import { Observable, Subscription, catchError, firstValueFrom, map, of, switchMap, take, throwError } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 import { config } from '../const';
 import { TranslationService } from '../translation/translation.service';
 import { AuthResponse } from '../models/auth.interfaces';
+import { withHttpTransferCacheOptions } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -97,6 +98,15 @@ export class AuthService {
   signOut()
   {
     return signOut(this.auth);
+  }
+
+  getCustomClaims() {
+    return this.authState$.pipe(
+      take(1),
+      switchMap((user: User | null) => { // Explicitly type the user parameter
+        return of(user);
+      })
+    );
   }
 
   createNewPatient(email: string, password: string, name: string): Observable<AuthResponse> {
