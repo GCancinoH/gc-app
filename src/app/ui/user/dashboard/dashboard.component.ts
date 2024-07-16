@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { Observable, Subscription, take } from 'rxjs';
-import { AuthService } from '../../../core/auth/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { User } from '@angular/fire/auth';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';

@@ -1,31 +1,26 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button'
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TitleService } from '../../core/title/title.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { AuthService } from '../../core/auth/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '../../core/translation/translate.pipe';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '../../core/translation/translation.service';
+import { SigninComponent } from './signin/signin.component';
+import { SignupComponent } from './signup/signup.component';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
-    MatButtonModule, MatFormFieldModule, MatInputModule, MatMenuModule,
-    MatIcon, MatCardModule, MatSnackBarModule,
-    ReactiveFormsModule, FontAwesomeModule,
-    TranslatePipe
+    MatButtonModule, MatMenuModule, MatCardModule, MatIcon,
+    FontAwesomeModule,
+    TranslatePipe, SigninComponent, SignupComponent
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
@@ -36,14 +31,8 @@ export class AuthComponent implements OnInit {
   // Injects
   authSrv = inject(AuthService);
   titleSrv = inject(TitleService);
-  fb = inject(FormBuilder);
-  destroyRef = inject(DestroyRef);
-  snackBar = inject(MatSnackBar);
-  router = inject(Router);
   translator = inject(TranslationService);
   // Variables
-  loginForm!: FormGroup;
-  registerForm!: FormGroup;
   isSignInActive = signal<boolean>(true);
   isSignUpActive = signal<boolean>(false);
   isLoading = signal<boolean>(false);
@@ -54,23 +43,6 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleSrv.setTitle('Authentication');
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      fullName: ['', [Validators.required, Validators.pattern(this.nameRegex)]]
-    });
-
-    this.loginForm.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef),
-      debounceTime(350),
-      distinctUntilChanged()
-    );
-
-    console.log(this.translator.getCurrentLanguage());
   }
 
   constructor() {
@@ -79,7 +51,7 @@ export class AuthComponent implements OnInit {
   }
 
   /* Sign In & Sign Up Functions */
-  onSignIn() {
+  /*onSignIn() {
     this.isLoading.set(true);
     this.loginForm.disable();
     const email = this.loginForm.get('email')?.value;
@@ -98,13 +70,13 @@ export class AuthComponent implements OnInit {
           this.loginForm.enable();
         }
       })
-  }
+  }*/
 
   onChangeLanguage(lang: string) {
     this.translator.changeLanguage(lang);
   }
 
-  onSignUp() {
+  /*onSignUp() {
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
     const name = this.registerForm.get('fullName')?.value;
@@ -117,7 +89,7 @@ export class AuthComponent implements OnInit {
         this.snackBar.open(res.message!, 'X', { duration: 3000})
       }
     });
-  }
+  }*/
 
   onGoogleSignIn() {
     console.log('Google sign in');
@@ -127,14 +99,10 @@ export class AuthComponent implements OnInit {
   activateSignIn() {
     this.isSignInActive.set(true);
     this.isSignUpActive.set(false);
-    this.registerForm.disable();
-    this.loginForm.enable();
   }
 
   activateSignUp() {
     this.isSignInActive.set(false);
     this.isSignUpActive.set(true);
-    this.loginForm.disable();
-    this.registerForm.enable();
   }
 }

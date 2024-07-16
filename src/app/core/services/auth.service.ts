@@ -4,10 +4,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, updateProfile } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription, catchError, firstValueFrom, throwError } from 'rxjs';
-import { AuthResponse } from './auth.interfaces';
 import { FirebaseError } from '@angular/fire/app';
 import { config } from '../const';
 import { TranslationService } from '../translation/translation.service';
+import { AuthResponse } from '../models/auth.interfaces';
 
 @Injectable({
   providedIn: 'root'

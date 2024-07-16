@@ -1,0 +1,35 @@
+<span class="auth-card-title">{{'auth.register.welcome-msg' | translate }}</span>
+<!-- Google Sign In -->
+<button 
+    mat-flat-button 
+    class="auth-google-btn elevation-4"
+    (click)="onGoogleSignUp()"
+>
+    <fa-icon [icon]="googleIcn"></fa-icon>
+    <span class="auth-google-text">{{'auth.register.google-signup' | translate }}</span>
+</button>
+<span class="or-divider">{{'auth.register.or-divider' | translate}}</span>
+<form [formGroup]="registerForm" class="auth-form" (ngSubmit)="onSignUp()">
+    <mat-form-field appearance="outline" class="auth-input">
+        <mat-label>{{'auth.register.name-field' | translate}}</mat-label>
+        <input matInput placeholder="John Doe" formControlName="fullName" type="text">
+        <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="auth-input">
+        <mat-label>{{'auth.register.email-field' | translate}}</mat-label>
+        <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
+        <mat-icon matSuffix>alternate_email</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="margin-bottom: 10px;">
+        <mat-label>{{'auth.register.pass-field' | translate}}</mat-label>
+        <input matInput formControlName="password" type="password">
+        <mat-icon matSuffix>key</mat-icon>
+    </mat-form-field>
+    <button mat-flat-button class="auth-signin-btn">
+        @if(isLoading() === false) {
+            {{ 'auth.register.signup-btn' | translate }}
+        } @else {
+            <span class="loader"></span>
+        }
+    </button>
+</form>
