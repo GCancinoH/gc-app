@@ -22,7 +22,8 @@
       "dom"
     ],
     "paths": {
-      "@features/*": ["./src/app/ui/*"]
+      "@features/*": ["./src/app/ui/*"],
+      "@core/*": ["./src/app/core/*"]
     }
   },
   "angularCompilerOptions": {

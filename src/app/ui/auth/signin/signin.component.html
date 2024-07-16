@@ -4,6 +4,7 @@
   mat-flat-button 
   class="auth-google-btn elevation-4"
   (click)="onGoogleSignIn()"
+  [disabled]="isLoading()"
 >
   <fa-icon [icon]="googleIcn"></fa-icon>
   <span class="auth-google-text">{{'auth.login.google-signin' | translate}}</span>

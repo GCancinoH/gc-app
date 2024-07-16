@@ -55,27 +55,27 @@ export class AuthService {
           case 'auth/invalid-email':
             return {
               success: false,
-              error: 'Invalid email'
+              error: this.translator.getTranslation('auth.errors.invalid-email')
             };
           case 'auth/user-disabled':
             return {
               success: false,
-              error: 'This user is disabled.'
+              error: this.translator.getTranslation('auth.errors.user-disabled')
             };
           case 'auth/user-not-found':
             return {
               success: false,
-              error: 'User not found'
+              error: this.translator.getTranslation('auth.errors.user-not-found')
             };
           case 'auth/wrong-password':
             return {
               success: false,
-              error: 'Wrong password'
+              error: this.translator.getTranslation('auth.errors.wrong-pass')
             };
           case 'auth/invalid-credential':
             return {
               success: false,
-              error: 'Invalid credentials'
+              error: this.translator.getTranslation('auth.errors.invalid-credentials')
             };
           default:
             console.error('Error signing in:', error);

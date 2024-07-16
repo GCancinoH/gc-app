@@ -22,7 +22,13 @@
       "or-divider": "O"
     },
     "errors": {
-      
+      "invalid-form": "El formulario es inválido. Por favor revísalo.",
+      "invalid-email": "Por favor, introduzca un correo válido.",
+      "user-disabled": "Este usuario está deshabilitado. Envía un mensaje al administrador para ver qué está pasando.",
+      "user-not-found": "El correo electrónico no está registrado en nuestra base de datos.",
+      "wrong-pass": "La contraseña es inválida.",
+      "invalid-credentials": "Las credenciales son inválidas: el correo o la contraseña son incorrectas.",
+      "unexpected-error": "Se ha producido un error inesperado."
     }
   }
 }

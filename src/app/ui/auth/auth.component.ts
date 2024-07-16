@@ -50,28 +50,6 @@ export class AuthComponent implements OnInit {
     this.iconReg.addSvgIcon('lang-us', this.sanitizer.bypassSecurityTrustResourceUrl('./images/svg/us.svg'));
   }
 
-  /* Sign In & Sign Up Functions */
-  /*onSignIn() {
-    this.isLoading.set(true);
-    this.loginForm.disable();
-    const email = this.loginForm.get('email')?.value;
-    const password = this.loginForm.get('password')?.value;
-    this.authSrv.signInWithEmailAndPass(email, password)
-      .then(res => {
-        if(res.success) {
-          this.isLoading.set(false);
-          this.snackBar.open("Signed In Successfully!", 'X', {
-            duration: 5000
-          })
-          this.router.navigate(['/u/dashboard']);
-        } else {
-          this.snackBar.open(res.error!, 'X', {duration: 5000});
-          this.isLoading.set(false);
-          this.loginForm.enable();
-        }
-      })
-  }*/
-
   onChangeLanguage(lang: string) {
     this.translator.changeLanguage(lang);
   }

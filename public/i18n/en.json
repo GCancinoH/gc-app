@@ -20,6 +20,15 @@
       "signup-btn": "Join us!",
       "google-signup": "Sign up with Google",
       "or-divider": "OR"
+    },
+    "errors": {
+      "invalid-form": "The form invalid. Please check it out.",
+      "invalid-email": "Please enter a valid email.",
+      "user-disabled": "This user is disabled. Send a message to the admin to see what's happening.",
+      "user-not-found": "This email was not found in our database.",
+      "wrong-pass": "The password is invalid.",
+      "invalid-credentials": "Credentials are invalid: check your email and password.",
+      "unexpected-error": "An unexpected error ocurred."
     }
   }
 }
