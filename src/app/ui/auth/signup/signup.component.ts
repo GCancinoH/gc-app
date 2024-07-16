@@ -6,12 +6,14 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 /* Other Imports */
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { TranslatePipe } from '../../../core/translation/translate.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'gc-signup',
@@ -27,6 +29,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 export class SignupComponent implements OnInit{
   // Injects
   fb = inject(FormBuilder);
+  authSrv = inject(AuthService);
+  snackBar = inject(MatSnackBar);
   // Variables
   registerForm!: FormGroup;
   googleIcn = faGoogle;
@@ -50,5 +54,19 @@ export class SignupComponent implements OnInit{
     );
   }
   onGoogleSignUp() {}
-  onSignUp() {}
+  onSignUp()
+  {
+    const email = this.registerForm.get('email')?.value;
+    const password = this.registerForm.get('password')?.value;
+    const name = this.registerForm.get('fullName')?.value;
+
+    this.authSrv.createNewPatient(email, password, name).subscribe(res => {
+      if (res.success) {
+        console.log(res);
+        this.snackBar.open("Usuario Registrado Exitosamente", 'X', { duration: 3000})
+      } else {
+        this.snackBar.open(res.message!, 'X', { duration: 3000})
+      }
+    });
+  }
 }

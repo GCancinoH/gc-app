@@ -100,7 +100,7 @@ export class AuthService {
   }
 
   createNewPatient(email: string, password: string, name: string): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(config.serverURL + 'createNewUser', { email, password, name })
+    return this.httpClient.post<AuthResponse>(config.serverURL + 'createNewAdmin', { email, password, name })
       .pipe(
         catchError(err => {
           const res: AuthResponse = {

@@ -60,7 +60,7 @@ export class SigninComponent implements OnInit {
     /* Check if the form is valid */
     if ( !this.loginForm.valid ) {
       this.snackBar.open(
-        this.translator.getTranslation("auth.errors.invalid_form"), 'X', {
+        this.translator.getTranslation("auth.errors.invalid-form"), 'X', {
           duration: 5000
         });
       return;

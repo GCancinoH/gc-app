@@ -54,21 +54,6 @@ export class AuthComponent implements OnInit {
     this.translator.changeLanguage(lang);
   }
 
-  /*onSignUp() {
-    const email = this.registerForm.get('email')?.value;
-    const password = this.registerForm.get('password')?.value;
-    const name = this.registerForm.get('fullName')?.value;
-
-    this.authSrv.createNewPatient(email, password, name).subscribe(res => {
-      if (res.success) {
-        console.log(res);
-        this.snackBar.open("Usuario Registrado Exitosamente", 'X', { duration: 3000})
-      } else {
-        this.snackBar.open(res.message!, 'X', { duration: 3000})
-      }
-    });
-  }*/
-
   onGoogleSignIn() {
     console.log('Google sign in');
   }
