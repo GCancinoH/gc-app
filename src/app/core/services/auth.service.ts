@@ -3,12 +3,12 @@ import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, IdTokenResult, idToken, getIdTokenResult } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription, catchError, firstValueFrom, map, of, switchMap, take, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, map, of, switchMap, take, throwError } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 import { config } from '../const';
 import { TranslationService } from '../translation/translation.service';
 import { AuthResponse } from '../models/auth.interfaces';
-import { withHttpTransferCacheOptions } from '@angular/platform-browser';
+import { initializeDatabase } from '@core/db/auth.db';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class AuthService {
   res!: AuthResponse;
 
   get userState(): User | null {
-    return this.authState$.value;
+    return this.authState$;
   }
 
   async signInWithEmailAndPass(email: string, password: string): Promise<AuthResponse> {
@@ -49,6 +49,22 @@ export class AuthService {
       const res = await firstValueFrom(
         this.httpClient.post<AuthResponse>('https://gc-nutrition.vercel.app/v1/api/verifyIDToken', { idToken })
       );
+      try {
+        const db = await initializeDatabase();
+        await db.user.insert({
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName,
+          emailVerified: user.emailVerified,
+          token: idToken,
+          isLoggedIn: false
+        })
+      } catch (err) {
+        console.error(err);
+        return {
+          success: false,
+          message: err as string};
+      }
       return res;
     } catch (error) {
       if (error instanceof FirebaseError) {

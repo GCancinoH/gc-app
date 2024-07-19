@@ -1,6 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { TitleService } from './core/title/title.service';
+import { appInitialization } from '@core/init';
+import { NetworkService } from '@core/services/network.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +17,23 @@ import { TitleService } from './core/title/title.service';
 })
 export class AppComponent implements OnInit {
   titleSrv = inject(TitleService);
+  networkSrv = inject(NetworkService);
+  isOnline!: boolean;
+  destroyRef = inject(DestroyRef);
+
+  constructor() { this.isOnline = navigator.onLine; }
 
   ngOnInit(): void {
     this.titleSrv.setTitle('Home');
+    appInitialization();
+    this.networkSrv.isOnline$.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(isOnline => {
+        this.isOnline = isOnline;
+        console.log(this.isOnline);
+        return this.networkSrv.isOnline$;
+      })
+    )    
+
   }
 }

@@ -1,11 +1,16 @@
 import { Routes } from '@angular/router';
-import { userGuard } from './core/guards/user-guard.guard';
+import { canActivate, hasCustomClaim, redirectUnauthorizedTo, redirectLoggedInTo, emailVerified } from '@angular/fire/auth-guard';
+
+const adminOnly = () => hasCustomClaim('admin');
+const redirectUnauthorizedUsers = () => redirectUnauthorizedTo(['/auth']);
+const redirectLoggedInUsers = () => redirectLoggedInTo(['/u/dashboard']);
+const redirectVerifiedUsers = () => emailVerified;
 
 export const routes: Routes = [
     {
         path: 'auth',
         loadComponent: () => import('./ui/auth/auth.component').then(c => c.AuthComponent),
-        canActivate: [userGuard]
+        ...canActivate(redirectLoggedInUsers)
     },
     {
         'path': '', redirectTo: 'auth', pathMatch: 'full'
@@ -13,7 +18,7 @@ export const routes: Routes = [
     {
         path: 'u/dashboard',
         loadComponent: () => import('./ui/user/dashboard/dashboard.component').then(c => c.DashboardComponent),
-        canActivate: [userGuard]
+        ...canActivate(redirectUnauthorizedUsers)
     },
     {
         path: 'auth/next-steps',

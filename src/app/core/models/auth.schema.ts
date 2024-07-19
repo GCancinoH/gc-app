@@ -3,26 +3,23 @@ export const AuthSchema = {
     title: "Auth",
     version: 0,
     description: "Database to storage users",
-    primaryKey: "id",
+    primaryKey: "uid", // Use 'uid' as the primary key
     type: "object",
     properties: {
-        id: {
+        uid: {
             type: "string",
             maxLength: 50
         },
-        name: {
+        displayName: {
             type: "string",
-            maxLength: 50
+            maxLength: 50,
+            unique: true
         },
         email: {
-            type: "string",
-        },
-        password: {
-            type: "string",
-            maxLength: 30
+            type: "string"
         },
         role: {
-            type: "string",
+            type: "string"
         },
         token: {
             type: "string",
@@ -30,10 +27,14 @@ export const AuthSchema = {
         },
         emailVerified: {
             type: "boolean"
+        },
+        isLoggedIn: {
+            type: "boolean"
+        },
+        attachments: {
+            type: "object",
+            encrypted: true
         }
     },
-    encrypted: ["secret"],
-    attachments: {
-        encrypted: true
-    }
-}
+    required: ['uid', 'email', 'isLoggedIn'],
+};
