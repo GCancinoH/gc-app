@@ -66,7 +66,10 @@ export class AuthService {
             isLoggedIn: true
           });
         } else {
-          
+          this.localDB.updateUser({
+            key: 'uid',
+            val: user.uid
+          }, {isLoggedIn: true});
         }
       } catch (err) {
         console.error(err);

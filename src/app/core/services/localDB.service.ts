@@ -15,6 +15,11 @@ export interface UserDBLocally {
     isLoggedIn: boolean;
 }
 
+export interface UpdateOBJ {
+    key: string,
+    val: string;
+}
+
 @Injectable({
   providedIn: "root"
 })
@@ -44,7 +49,7 @@ export class LocalDBService {
         }
     }
 
-    async updateUser(data: object): Promise<boolean>
+    /*async updateUser(data: object): Promise<boolean>
     {
         const db = await initializeDatabase();
         try {
@@ -55,6 +60,31 @@ export class LocalDBService {
         } catch (err) {
             console.error(err);
             return false;
+        }
+    }*/
+
+    async updateUser(findData: UpdateOBJ, updateData: object)
+    {
+        const db = await initializeDatabase();
+        try {
+
+            const query = await db.user.find({
+                selector: this.createUpdateData(findData.key, findData.val)
+            })
+            await query.update({
+                $set: updateData
+            })
+
+        } catch(err) {
+
+        }
+    }
+
+    private createUpdateData(key: string, val: string): object {
+        return {
+            [key]: {
+                $gt: [val]
+            }
         }
     }
 }
