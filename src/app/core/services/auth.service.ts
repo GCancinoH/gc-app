@@ -9,11 +9,13 @@ import { config } from '../const';
 import { TranslationService } from '../translation/translation.service';
 import { AuthResponse } from '../models/auth.interfaces';
 import { initializeDatabase } from '@core/db/auth.db';
+import { LocalDBService } from './localDB.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // Inject
   auth = inject(Auth);
   snackBar = inject(MatSnackBar);
   errorMessage = signal<string>('');
@@ -23,6 +25,8 @@ export class AuthService {
   authStateSubscription!: Subscription;
   destroyRef = inject(DestroyRef);
   translator = inject(TranslationService);
+  localDB = inject(LocalDBService);
+  // Variables
   res!: AuthResponse;
 
   get userState(): User | null {
@@ -50,15 +54,20 @@ export class AuthService {
         this.httpClient.post<AuthResponse>('https://gc-nutrition.vercel.app/v1/api/verifyIDToken', { idToken })
       );
       try {
-        const db = await initializeDatabase();
-        await db.user.insert({
-          uid: user.uid,
-          email: user.email,
-          name: user.displayName,
-          emailVerified: user.emailVerified,
-          token: idToken,
-          isLoggedIn: false
-        })
+        const ifUserCreated = await this.localDB.findInUser({ uid: user.uid});
+        if (!ifUserCreated) {
+          await this.localDB.insertIntoUser({
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName,
+            photoURL: user.photoURL,
+            emailVerified: user.emailVerified,
+            token: idToken,
+            isLoggedIn: true
+          });
+        } else {
+          
+        }
       } catch (err) {
         console.error(err);
         return {
