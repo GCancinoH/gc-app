@@ -4,11 +4,15 @@ import { AuthService } from '../../../core/services/auth.service';
 import { User } from '@angular/fire/auth';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { DashboardToolbar } from './utils/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [JsonPipe, AsyncPipe],
+  imports: [
+    JsonPipe, AsyncPipe,
+    DashboardToolbar
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -17,7 +21,6 @@ export class DashboardComponent implements OnInit {
   authSrv = inject(AuthService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:2867377410.
   isAdmin = signal<boolean>(false);
 
   // Variables

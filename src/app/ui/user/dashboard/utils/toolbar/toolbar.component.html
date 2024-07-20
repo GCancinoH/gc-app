@@ -1,0 +1,26 @@
+<mat-toolbar class="mat-elevation-z3" style="background-color: black;">
+    <button mat-icon-button>
+        <mat-icon style="color: white">menu</mat-icon>
+    </button>
+    <span class="app-title">GC App</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+        <mat-icon style="color: white">language</mat-icon>
+    </button>
+    <button mat-icon-button>
+        <mat-icon style="color: white">notifications</mat-icon>
+    </button>
+    <button mat-icon-button>
+        <mat-icon style="color: white" [matMenuTriggerFor]="userMenu">account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu" style="background-color: white !important;">
+        <button mat-menu-item>
+            <mat-icon>face</mat-icon>
+            <span>Profile</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>
