@@ -131,7 +131,7 @@ export class AuthService {
   getCustomClaims() {
     return this.authState$.pipe(
       take(1),
-      switchMap((user: User | null) => { // Explicitly type the user parameter
+      switchMap((user: User | null) => {
         return of(user);
       })
     );

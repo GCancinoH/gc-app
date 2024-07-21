@@ -1,0 +1,32 @@
+<div class="add-weight-container">
+    <span>Today's Date: {{ todaysDate | date: 'MMMM dd, yyyy' }}</span>
+    <form [formGroup]="addWeightForm" class="aw-form" (ngSubmit)="onSubmitData()">
+        <!-- Weight -->
+        <mat-form-field appearance="outline" class="fullwidth">
+            <mat-label>Peso</mat-label>
+            <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01">
+            <!--@if(loginForm.get('email')?.hasError('required')) {
+            <mat-error>Email is <strong>required</strong></mat-error>
+            }
+            @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+            <mat-error>Email is <strong>invalid</strong></mat-error>
+            }-->
+        </mat-form-field>
+        <!--<mat-form-field appearance="outline" style="margin-bottom: 10px;">
+            <mat-label>{{ 'auth.login.pass-field' | translate }}</mat-label>
+            <input matInput formControlName="password" type="password">
+            <mat-icon matSuffix>key</mat-icon>
+            @if(loginForm.get('password')?.hasError('required')) {
+            <mat-error>Password is <strong>required</strong></mat-error>
+            }
+        </mat-form-field>
+
+        <button mat-flat-button class="auth-signin-btn">
+            @if(isLoading() === false) {
+            {{ 'auth.login.signin-btn' | translate }}
+            } @else {
+            <span class="loader"></span>
+            }
+        </button>-->
+    </form>  
+</div>

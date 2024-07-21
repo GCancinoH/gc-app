@@ -1,17 +1,34 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { Observable, Subscription, switchMap, take } from 'rxjs';
+import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { User } from '@angular/fire/auth';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { DashboardToolbar } from './utils/toolbar/toolbar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { SidenavContent } from './utils/sidenav-content/sidenav-content.component';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { AddWeightComponent } from './features/core/bottom-sheets/add-weight/add-weight.component';
+
+export interface UserInfo {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  emailVerified: boolean;
+  phoneNumber: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     JsonPipe, AsyncPipe,
-    DashboardToolbar
+    MatSidenavModule, MatFabButton, MatIcon, MatMenuModule,
+    DashboardToolbar, SidenavContent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -21,11 +38,24 @@ export class DashboardComponent implements OnInit {
   authSrv = inject(AuthService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
+  bottomSheet = inject(MatBottomSheet);
+  // Variables
   isAdmin = signal<boolean>(false);
+  isSidenavCollapsed = signal<boolean>(false);
+  sideNavWidth = computed(() => {
+    return this.isSidenavCollapsed() ? '65px' : '250px';
+  });
 
   // Variables
   user$!: Observable<User | null>;
   userSubscription!: Subscription;
+
+  constructor() {
+    effect(() => {
+      console.log("Is sidenav collapsed?: ", this.isSidenavCollapsed());
+      console.log("Sidenav width: ", this.sideNavWidth());
+    })
+  }
 
   ngOnInit(): void {
     this.user$ = this.authSrv.authState$;
@@ -52,5 +82,14 @@ export class DashboardComponent implements OnInit {
   onSignOut() {
     this.authSrv.signOut(); 
     this.router.navigate(['/auth']);
+  }
+
+  onToggleSidenav(collapsed: boolean) {
+    console.log("Collapsed?: ", collapsed);
+    this.isSidenavCollapsed.set(collapsed);
+  }
+
+  openAddWeightBottomSheet() {
+    this.bottomSheet.open(AddWeightComponent);
   }
 }

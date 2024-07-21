@@ -1,7 +1,24 @@
-<dashboard-toolbar></dashboard-toolbar>
-<button (click)="onSignOut()">Logout</button>
-@if(isAdmin()) {
-    <button (click)="onSignOut()">Admin</button>
-} 
-<br />
-<pre>{{ user$ | async | json  }}</pre>
+<dashboard-toolbar (isCollapsed)="onToggleSidenav($event)" />
+<mat-sidenav-container>
+    <mat-sidenav opened mode="side" [style.width]="sideNavWidth()" class="main-nav">
+        <sidenav-content 
+            [userName]="(user$ | async)?.displayName"
+            [userPhoto]="(user$ | async)?.photoURL"
+            [isAdmin]="isAdmin()"
+        />
+    </mat-sidenav>
+    <mat-sidenav-content class="content">
+        sijdfkjldkfjalkdjlkajdflkajdslfkjasldkfjaslkdjf
+        <button mat-fab class="fab-button" [matMenuTriggerFor]="fabMenu">
+            <mat-icon style="color: white;">add_circle</mat-icon>
+        </button>
+        <mat-menu #fabMenu="matMenu">
+            <button mat-menu-item (click)="openAddWeightBottomSheet()">
+                <mat-icon class="material-symbols-sharp">monitor_weight_gain</mat-icon>
+                <span>Add today weight</span>
+            </button>
+            <button mat-menu-item>Item 2</button>
+        </mat-menu>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
