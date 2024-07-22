@@ -1,0 +1,8 @@
+.page-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}

@@ -13,5 +13,6 @@
     display: flex;
     flex-direction: row;
 }
+.align-right { text-align: end; }
 
 

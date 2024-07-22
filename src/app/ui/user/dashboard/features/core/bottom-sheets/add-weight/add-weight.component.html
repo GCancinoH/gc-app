@@ -1,17 +1,53 @@
 <div class="add-weight-container">
     <span>Today's Date: {{ todaysDate | date: 'MMMM dd, yyyy' }}</span>
     <form [formGroup]="addWeightForm" class="aw-form" (ngSubmit)="onSubmitData()">
-        <!-- Weight -->
-        <mat-form-field appearance="outline" class="fullwidth">
-            <mat-label>Peso</mat-label>
-            <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01">
-            <!--@if(loginForm.get('email')?.hasError('required')) {
-            <mat-error>Email is <strong>required</strong></mat-error>
-            }
-            @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
-            <mat-error>Email is <strong>invalid</strong></mat-error>
-            }-->
-        </mat-form-field>
+        <!-- Weight & IMC -->
+        <Row>
+            <mat-form-field appearance="outline" class="fullwidth">
+                <mat-label>Peso</mat-label>
+                <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01">
+                <!--@if(loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>required</strong></mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>invalid</strong></mat-error>
+                }-->
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="fullwidth">
+                <mat-label>IMC</mat-label>
+                <input matInput placeholder="24.5" formControlName="bmi" type="number" step="0.01">
+                <!--@if(loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>required</strong></mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>invalid</strong></mat-error>
+                }-->
+            </mat-form-field>
+        </Row>
+        <!-- Body Fat & Muscle Mass Percentage-->
+        <Row>
+            <mat-form-field appearance="outline" class="fullwidth">
+                <mat-label>Body Fat</mat-label>
+                <input matInput placeholder="15.6" formControlName="bodyFat" type="number" step="0.01" class="align-right">
+                <span matTextSuffix>%</span>
+                <!--@if(loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>required</strong></mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>invalid</strong></mat-error>
+                }-->
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="fullwidth">
+                <mat-label>Muscle Mass</mat-label>
+                <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01" readonly="true">
+                <!--@if(loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>required</strong></mat-error>
+                }
+                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is <strong>invalid</strong></mat-error>
+                }-->
+            </mat-form-field>
+        </Row> 
         <!--<mat-form-field appearance="outline" style="margin-bottom: 10px;">
             <mat-label>{{ 'auth.login.pass-field' | translate }}</mat-label>
             <input matInput formControlName="password" type="password">

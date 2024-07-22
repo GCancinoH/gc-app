@@ -12,6 +12,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { AddWeightComponent } from './features/core/bottom-sheets/add-weight/add-weight.component';
+import { ComposeRow } from '@core/components/row/row.component';
+import { TitleService } from '@core/title/title.service';
 
 export interface UserInfo {
   uid: string;
@@ -28,7 +30,7 @@ export interface UserInfo {
   imports: [
     JsonPipe, AsyncPipe,
     MatSidenavModule, MatFabButton, MatIcon, MatMenuModule,
-    DashboardToolbar, SidenavContent
+    DashboardToolbar, SidenavContent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -39,6 +41,7 @@ export class DashboardComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   router = inject(Router);
   bottomSheet = inject(MatBottomSheet);
+  title = inject(TitleService);
   // Variables
   isAdmin = signal<boolean>(false);
   isSidenavCollapsed = signal<boolean>(false);
@@ -58,7 +61,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Set title
+    this.title.setTitle('Dashboard');
+    // Get user state
     this.user$ = this.authSrv.authState$;
+    // Get user custom claims
     this.authSrv.getCustomClaims().subscribe({
       next: (user: any) => {
         user.getIdTokenResult().then((idTokenResult: any) => {
