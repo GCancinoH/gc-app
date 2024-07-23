@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { CollectionReference, Firestore, Timestamp } from '@angular/fire/firestore';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Firestore, Timestamp } from '@angular/fire/firestore';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AsyncValidator } from '@angular/forms';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -54,33 +54,35 @@ export class AddWeightComponent {
   addWeightForm!: FormGroup;
   todaysDate = new Date();
   weightRegex: RegExp = /^\d{2,3}(\.\d{1,2})?$/;
-  doublePattern: RegExp = /^\d{1,2}(\.\d{1,2})?$/gm;
-  vfRegex: RegExp = /^\d+$/gm;
+  doublePattern: RegExp = /^\d{1,2}(\.\d{1,2})?$/;
+  vfRegex: RegExp = /^\d+$/;
   isLoading = signal<boolean>(false);
   bodyCompositionCollection = collection(this.db, 'bodyComposition')
 
   // Methods
   constructor() {
     this.addWeightForm = this.fb.group({
-      weight: ['', [Validators.required]],
+      weight: ['', [Validators.required, Validators.pattern(this.weightRegex)]],
       date: [this.todaysDate],
-      bmi: ['', [Validators.required]],
-      visceralFat: ['', [Validators.required]],
-      bodyFat: ['', [Validators.required]],
-      muscle: ['', [Validators.required]]
+      bmi: ['', [Validators.required, Validators.pattern(this.doublePattern)]],
+      visceralFat: ['', [Validators.required, Validators.pattern(this.vfRegex)]],
+      bodyFat: ['', [Validators.required, Validators.pattern(this.doublePattern)]],
+      muscle: ['', [Validators.required, Validators.pattern(this.doublePattern)]]
     });
   }
 
   async onSubmitData() {
-    if(this.addWeightForm.invalid) {
-      this.snackBar.open("Formulario inválido", "X", {duration: 5000});
+    this.addWeightForm.markAllAsTouched();
+  
+    if (this.addWeightForm.invalid) {
+      this.snackBar.open("Formulario inválido", "X", { duration: 5000 });
       return;
     }
-
+    // Initialize the loading state
     this.isLoading.set(true);
     // Getting user data
     const user = this.authSrv.getCurrentUser();
-
+    // Put the data inside the interface
     const data: BodyCompositionData = {
       uid: user!.uid,
       date: Timestamp.fromDate(this.todaysDate),
@@ -89,27 +91,27 @@ export class AddWeightComponent {
       visceralFat: this.addWeightForm.get('visceralFat')?.value,
       bodyFat: this.addWeightForm.get('bodyFat')?.value,
       muscle: this.addWeightForm.get('muscle')?.value
-    }
-
+    };
+    // Try & Catch Block
     try {
       const idToken = await user!.getIdToken();
       const payload = { idToken: idToken };
       const res = await firstValueFrom(this.http.post<Response>(config.serverURL + 'verifyIDToken', payload));
-
-      if(res.success) {
-        addDoc(this.bodyCompositionCollection, data);  
+  
+      if (res.success) {
+        await addDoc(this.bodyCompositionCollection, data);
         this.isLoading.set(false);
         this.bottomSheetRef.dismiss();
-        this.snackBar.open("Data guardada con éxito", "X", {duration: 5000});
+        this.snackBar.open("Data guardada con éxito", "X", { duration: 5000 });
       } else {
-        console.log("Fuuuuck")!
+        console.log("Fuuuuck");
         return;
       }
-
-    } catch(err) {
+  
+    } catch (err) {
       console.log(err);
-
+    } finally {
+      this.isLoading.set(false);
     }
-    
   }
 }

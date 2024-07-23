@@ -1,3 +1,8 @@
+@defer (when isLoading()) {
+    <div class="loading">
+        <span class="loader"></span>
+    </div>
+}
 <div class="add-weight-container">
     <span>Fecha de hoy: {{ todaysDate | date: 'MMMM dd, yyyy' }}</span>
     <form [formGroup]="addWeightForm" class="aw-form" (ngSubmit)="onSubmitData()">
