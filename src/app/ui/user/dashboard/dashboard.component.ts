@@ -12,7 +12,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { AddWeightComponent } from './features/core/bottom-sheets/add-weight/add-weight.component';
-import { ComposeRow } from '@core/components/row/row.component';
 import { TitleService } from '@core/title/title.service';
 
 export interface UserInfo {

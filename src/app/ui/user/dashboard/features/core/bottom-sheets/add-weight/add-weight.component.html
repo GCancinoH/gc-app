@@ -1,34 +1,44 @@
 <div class="add-weight-container">
     <span>Today's Date: {{ todaysDate | date: 'MMMM dd, yyyy' }}</span>
     <form [formGroup]="addWeightForm" class="aw-form" (ngSubmit)="onSubmitData()">
-        <!-- Weight & IMC -->
-        <Row>
-            <mat-form-field appearance="outline" class="fullwidth">
-                <mat-label>Peso</mat-label>
-                <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01">
-                <!--@if(loginForm.get('email')?.hasError('required')) {
-                <mat-error>Email is <strong>required</strong></mat-error>
-                }
-                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
-                <mat-error>Email is <strong>invalid</strong></mat-error>
-                }-->
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="fullwidth">
+            <mat-label>Peso</mat-label>
+            <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01">
+            <span matTextSuffix>kg</span>
+            @if(addWeightForm.get('weight')?.hasError('required')) {
+            <mat-error>Este campo es <strong>requerido</strong></mat-error>
+            }
+            @if(addWeightForm.get('weight')?.hasError('pattern') && !addWeightForm.get('weight')?.hasError('required')) {
+            <mat-error>Formato <strong>inválido</strong></mat-error>
+            }
+        </mat-form-field>
+        <!-- IMC & Grasa Visceral -->
+        <Layout direction="responsive" [styles]="{'margin-top': '12px'}">
             <mat-form-field appearance="outline" class="fullwidth">
                 <mat-label>IMC</mat-label>
-                <input matInput placeholder="24.5" formControlName="bmi" type="number" step="0.01">
-                <!--@if(loginForm.get('email')?.hasError('required')) {
-                <mat-error>Email is <strong>required</strong></mat-error>
+                <input matInput placeholder="24.2" formControlName="bmi" type="number" step="0.01">
+                @if(addWeightForm.get('bmi')?.hasError('required')) {
+                    <mat-error>Este campo es <strong>requerido</strong></mat-error>
                 }
-                @if(loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
-                <mat-error>Email is <strong>invalid</strong></mat-error>
-                }-->
+                @if(addWeightForm.get('bmi')?.hasError('pattern') && !addWeightForm.get('bmi')?.hasError('required')) {
+                    <mat-error>Formato <strong>inválido</strong></mat-error>
+                }
             </mat-form-field>
-        </Row>
-        <!-- Body Fat & Muscle Mass Percentage-->
-        <Row>
             <mat-form-field appearance="outline" class="fullwidth">
-                <mat-label>Body Fat</mat-label>
-                <input matInput placeholder="15.6" formControlName="bodyFat" type="number" step="0.01" class="align-right">
+                <mat-label>Grasa Visceral</mat-label>
+                <input matInput placeholder="5" formControlName="visceralFat" type="number" step="0.01">
+                @if(addWeightForm.get('visceralFat')?.hasError('required')) {
+                    <mat-error>Este campo es <strong>requerido</strong></mat-error>
+                }
+                @if(addWeightForm.get('visceralFat')?.hasError('pattern') && !addWeightForm.get('visceralFat')?.hasError('required')) {
+                    <mat-error>Formato <strong>inválido</strong></mat-error>
+                }
+            </mat-form-field>
+        </Layout>
+        <Layout direction="responsive" [styles]="{'margin-top': '12px'}">
+            <mat-form-field appearance="outline" class="fullwidth">
+                <mat-label>Masa Grasa</mat-label>
+                <input matInput placeholder="24.2" formControlName="bodyFat" type="number" step="0.01">
                 <span matTextSuffix>%</span>
                 <!--@if(loginForm.get('email')?.hasError('required')) {
                 <mat-error>Email is <strong>required</strong></mat-error>
@@ -38,8 +48,9 @@
                 }-->
             </mat-form-field>
             <mat-form-field appearance="outline" class="fullwidth">
-                <mat-label>Muscle Mass</mat-label>
-                <input matInput placeholder="66.00" formControlName="weight" type="number" step="0.01" readonly="true">
+                <mat-label>Masa Muscular</mat-label>
+                <input matInput placeholder="40.50" formControlName="muscle" type="number" step="0.01">
+                <span matTextSuffix>%</span>
                 <!--@if(loginForm.get('email')?.hasError('required')) {
                 <mat-error>Email is <strong>required</strong></mat-error>
                 }
@@ -47,22 +58,30 @@
                 <mat-error>Email is <strong>invalid</strong></mat-error>
                 }-->
             </mat-form-field>
-        </Row> 
+        </Layout> <!-- ./End Layout -->
+        <div class="save-btn">
+            <button mat-flat-button>
+                @if(isLoading() === false) {
+                Guardar datos
+                } @else {
+                <span class="loader"></span>
+                }
+            </button>
+        </div>
+        
+    </form>
+</div>
+        
+        <!--<Row>
+            
+        </Row> -->
         <!--<mat-form-field appearance="outline" style="margin-bottom: 10px;">
             <mat-label>{{ 'auth.login.pass-field' | translate }}</mat-label>
             <input matInput formControlName="password" type="password">
             <mat-icon matSuffix>key</mat-icon>
-            @if(loginForm.get('password')?.hasError('required')) {
+            @if(lginForm.get('password')?.hasError('required')) {
             <mat-error>Password is <strong>required</strong></mat-error>
             }
         </mat-form-field>
 
-        <button mat-flat-button class="auth-signin-btn">
-            @if(isLoading() === false) {
-            {{ 'auth.login.signin-btn' | translate }}
-            } @else {
-            <span class="loader"></span>
-            }
-        </button>-->
-    </form>  
-</div>
+        -->

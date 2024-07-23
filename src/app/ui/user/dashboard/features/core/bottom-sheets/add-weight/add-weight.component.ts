@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ComposeRow } from '@core/components/row/row.component';
+import { ComposeLayout } from '@compose-ui/layout/layout.component'
 
 @Component({
   selector: 'add-weight',
@@ -13,7 +13,7 @@ import { ComposeRow } from '@core/components/row/row.component';
   imports: [
     ReactiveFormsModule, DatePipe,
     MatFormFieldModule, MatInputModule, MatButton, MatIcon,
-    ComposeRow
+    ComposeLayout
   ],
   templateUrl: './add-weight.component.html',
   styleUrl: './add-weight.component.css'
@@ -28,6 +28,7 @@ export class AddWeightComponent {
   doubleRegex: RegExp = /^\d{2,3}(\.\d{1,2})?$/;
   bmiPattern: RegExp = /^(?:16\.[5-9][0-9]?|1[7-9](\.\d{1,2})?|2[0-9](\.\d{1,2})?|3[0-9](\.\d{1,2})?|4[0-9](\.\d{1,2})?|50(\.00)?)$/
   vfRegex: RegExp = /^(?:[1-9]|1\d|20)$/
+  isLoading = signal<boolean>(false);
 
   // Methods
   constructor() {
