@@ -25,20 +25,20 @@ export class AddWeightComponent {
   // Variables
   addWeightForm!: FormGroup;
   todaysDate = new Date();
-  doubleRegex: RegExp = /^\d{2,3}(\.\d{1,2})?$/;
-  bmiPattern: RegExp = /^(?:16\.[5-9][0-9]?|1[7-9](\.\d{1,2})?|2[0-9](\.\d{1,2})?|3[0-9](\.\d{1,2})?|4[0-9](\.\d{1,2})?|50(\.00)?)$/
-  vfRegex: RegExp = /^(?:[1-9]|1\d|20)$/
+  weightRegex: RegExp = /^\d{2,3}(\.\d{1,2})?$/;
+  doublePattern: RegExp = /^\d{1,2}(\.\d{1,2})?$/gm;
+  vfRegex: RegExp = /^\d+$/gm;
   isLoading = signal<boolean>(false);
 
   // Methods
   constructor() {
     this.addWeightForm = this.fb.group({
-      weight: ['', [Validators.required, Validators.pattern(this.doubleRegex)]],
+      weight: ['', [Validators.required, Validators.pattern(this.weightRegex)]],
       date: ['', [Validators.required]],
-      bmi: ['', [Validators.required, Validators.pattern(this.bmiPattern)]],
-      visceralFat: ['', [Validators.required, Validators.pattern(this.vfRegex)]],
-      bodyFat: ['', [Validators.required, Validators.pattern(this.doubleRegex)]],
-      muscle: ['', [Validators.required, Validators.pattern(this.doubleRegex)]]
+      bmi: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.min(16), Validators.max(50)]],
+      visceralFat: ['', [Validators.required, Validators.pattern(this.vfRegex), Validators.max(20)]],
+      bodyFat: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.max(70)]],
+      muscle: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.max(70)]]
     });
   }
 
