@@ -28,9 +28,16 @@ export class AuthService {
   localDB = inject(LocalDBService);
   // Variables
   res!: AuthResponse;
+  public currentUser = signal<User | null>(null);
 
-  get userState(): User | null {
-    return this.authState$;
+  public getCurrentUser(): User | null {
+    return this.currentUser();
+  }
+
+  constructor() {
+    this.authStateSubscription = this.authState$.subscribe((user: User) => {
+      this.currentUser.set(user);
+    });
   }
 
   async signInWithEmailAndPass(email: string, password: string): Promise<AuthResponse> {

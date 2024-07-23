@@ -1,11 +1,35 @@
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
+import { CollectionReference, Firestore, Timestamp } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ComposeLayout } from '@compose-ui/layout/layout.component'
+import { config } from '@core/const';
+import { AuthService } from '@core/services/auth.service';
+import { firstValueFrom } from 'rxjs';
+import { addDoc, collection } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+interface BodyCompositionData {
+  uid: string;
+  date: Timestamp;
+  weight: number;
+  bmi: number;
+  visceralFat: number;
+  bodyFat: number;
+  muscle: number;
+}
+
+interface Response {
+  success: boolean;
+  message: string;
+  user: string;
+}
 
 @Component({
   selector: 'add-weight',
@@ -21,7 +45,11 @@ import { ComposeLayout } from '@compose-ui/layout/layout.component'
 export class AddWeightComponent {
   // Injects
   fb = inject(FormBuilder);
-  
+  http = inject(HttpClient);
+  authSrv = inject(AuthService);
+  bottomSheetRef = inject(MatBottomSheetRef<AddWeightComponent>);
+  db = inject(Firestore);
+  snackBar = inject(MatSnackBar);
   // Variables
   addWeightForm!: FormGroup;
   todaysDate = new Date();
@@ -29,18 +57,59 @@ export class AddWeightComponent {
   doublePattern: RegExp = /^\d{1,2}(\.\d{1,2})?$/gm;
   vfRegex: RegExp = /^\d+$/gm;
   isLoading = signal<boolean>(false);
+  bodyCompositionCollection = collection(this.db, 'bodyComposition')
 
   // Methods
   constructor() {
     this.addWeightForm = this.fb.group({
-      weight: ['', [Validators.required, Validators.pattern(this.weightRegex)]],
-      date: ['', [Validators.required]],
-      bmi: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.min(16), Validators.max(50)]],
-      visceralFat: ['', [Validators.required, Validators.pattern(this.vfRegex), Validators.max(20)]],
-      bodyFat: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.max(70)]],
-      muscle: ['', [Validators.required, Validators.pattern(this.doublePattern), Validators.max(70)]]
+      weight: ['', [Validators.required]],
+      date: [this.todaysDate],
+      bmi: ['', [Validators.required]],
+      visceralFat: ['', [Validators.required]],
+      bodyFat: ['', [Validators.required]],
+      muscle: ['', [Validators.required]]
     });
   }
 
-  onSubmitData() {}
+  async onSubmitData() {
+    if(this.addWeightForm.invalid) {
+      this.snackBar.open("Formulario inválido", "X", {duration: 5000});
+      return;
+    }
+
+    this.isLoading.set(true);
+    // Getting user data
+    const user = this.authSrv.getCurrentUser();
+
+    const data: BodyCompositionData = {
+      uid: user!.uid,
+      date: Timestamp.fromDate(this.todaysDate),
+      weight: this.addWeightForm.get('weight')?.value,
+      bmi: this.addWeightForm.get('bmi')?.value,
+      visceralFat: this.addWeightForm.get('visceralFat')?.value,
+      bodyFat: this.addWeightForm.get('bodyFat')?.value,
+      muscle: this.addWeightForm.get('muscle')?.value
+    }
+
+    try {
+      const idToken = await user!.getIdToken();
+      const payload = { idToken: idToken };
+      const res = await firstValueFrom(this.http.post<Response>(config.serverURL + 'verifyIDToken', payload));
+
+      if(res.success) {
+        addDoc(this.bodyCompositionCollection, data);  
+        this.isLoading.set(false);
+        this.bottomSheetRef.dismiss();
+        this.snackBar.open("Data guardada con éxito", "X", {duration: 5000});
+      } else {
+        console.log("Fuuuuck")!
+        return;
+      }
+
+    } catch(err) {
+      console.log(err);
+
+    }
+    
+  }
 }
