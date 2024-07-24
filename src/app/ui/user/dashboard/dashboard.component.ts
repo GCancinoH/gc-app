@@ -52,13 +52,6 @@ export class DashboardComponent implements OnInit {
   user$!: Observable<User | null>;
   userSubscription!: Subscription;
 
-  constructor() {
-    effect(() => {
-      console.log("Is sidenav collapsed?: ", this.isSidenavCollapsed());
-      console.log("Sidenav width: ", this.sideNavWidth());
-    })
-  }
-
   ngOnInit(): void {
     // Set title
     this.title.setTitle('Dashboard');
@@ -91,7 +84,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onToggleSidenav(collapsed: boolean) {
-    console.log("Collapsed?: ", collapsed);
     this.isSidenavCollapsed.set(collapsed);
   }
 
