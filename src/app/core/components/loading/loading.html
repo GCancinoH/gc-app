@@ -1,0 +1,5 @@
+@defer (when activated()) {
+    <div class="loading">
+        <span [ngClass]="loader()" [ngStyle]="styles()"></span>
+    </div>
+}

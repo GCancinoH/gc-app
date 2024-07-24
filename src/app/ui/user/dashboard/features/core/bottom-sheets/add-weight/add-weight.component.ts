@@ -14,6 +14,7 @@ import { AuthService } from '@core/services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { addDoc, collection } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ComposeLoading } from '@core/components/loading/loading';
 
 interface BodyCompositionData {
   uid: string;
@@ -37,7 +38,7 @@ interface Response {
   imports: [
     ReactiveFormsModule, DatePipe,
     MatFormFieldModule, MatInputModule, MatButton, MatIcon,
-    ComposeLayout
+    ComposeLayout, ComposeLoading
   ],
   templateUrl: './add-weight.component.html',
   styleUrl: './add-weight.component.css'
