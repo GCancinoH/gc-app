@@ -1,0 +1,14 @@
+<div [ngClass]="type()" [@fadeInOut]>
+    @if(type() === 'info') {
+        <mat-icon class="infocard-icon">info</mat-icon>
+    } @else if (type() === 'warning') {
+        <mat-icon>warning</mat-icon>
+    } @else if (type() === 'error') {
+        <mat-icon>error</mat-icon>
+    } @else {
+        <mat-icon>check_circle</mat-icon>
+    }
+    <span class="infocard-text">{{ text() }}</span>
+</div>
+
+

@@ -8,7 +8,12 @@
         />
     </mat-sidenav>
     <mat-sidenav-content class="content">
-        sijdfkjldkfjalkdjlkajdflkajdslfkjasldkfjaslkdjf
+        @defer (when !showWeightReminder()) {
+            <InfoCard 
+                text="¡No olvides ingresar tu peso hoy! Tu compromiso es clave para alcanzar tus metas de salud."
+                type="warning"
+            />
+        }
         <button mat-fab class="fab-button" [matMenuTriggerFor]="fabMenu">
             <mat-icon style="color: white;">add_circle</mat-icon>
         </button>

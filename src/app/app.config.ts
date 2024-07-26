@@ -1,11 +1,11 @@
-import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { CACHE_SIZE_UNLIMITED, getFirestore, persistentLocalCache, persistentMultipleTabManager, provideFirestore } from '@angular/fire/firestore';
+import { getFirestore, persistentLocalCache, provideFirestore, } from '@angular/fire/firestore';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideHttpClient } from '@angular/common/http';
@@ -32,9 +32,12 @@ export const appConfig: ApplicationConfig = {
       }
     )),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      return firestore;
+    }),
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
-    provideTranslations()
+    provideTranslations(),
   ]
 };

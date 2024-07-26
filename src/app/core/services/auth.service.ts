@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, IdTokenResult, idToken, getIdTokenResult } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, map, of, switchMap, take, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, map, of, shareReplay, switchMap, take, throwError } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 import { config } from '../const';
 import { TranslationService } from '../translation/translation.service';
 import { AuthResponse } from '../models/auth.interfaces';
 import { initializeDatabase } from '@core/db/auth.db';
 import { LocalDBService } from './localDB.service';
+import { Patient } from '@core/models/patient';
 
 @Injectable({
   providedIn: 'root'
@@ -21,23 +22,30 @@ export class AuthService {
   errorMessage = signal<string>('');
   authState$ = authState(this.auth);
   user$ = user(this.auth);
+  userOb$!: Observable<User | null>;
   httpClient = inject(HttpClient);
-  authStateSubscription!: Subscription;
   destroyRef = inject(DestroyRef);
   translator = inject(TranslationService);
   localDB = inject(LocalDBService);
   // Variables
   res!: AuthResponse;
   public currentUser = signal<User | null>(null);
+  userSubscription!: Subscription;
 
-  public getCurrentUser(): User | null {
-    return this.currentUser();
+  // Methods
+  constructor() {
+    effect(() => {
+      this.authState$.subscribe((user: User) => {
+        if(user) {
+          this.currentUser.set(user);
+        }
+      });
+    })
   }
 
-  constructor() {
-    this.authStateSubscription = this.authState$.subscribe((user: User) => {
-      this.currentUser.set(user);
-    });
+  public getCurrentUser(): User | null
+  {
+    return this.currentUser();
   }
 
   async signInWithEmailAndPass(email: string, password: string): Promise<AuthResponse> {
