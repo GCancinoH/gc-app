@@ -1,0 +1,42 @@
+<div class="sidenav-content-wrapper">
+    <div class="sidenav-content-header">
+        @if(!userPhoto()) {
+            <div class="user-picture-placeholder" [ngStyle]="isCollapsed() ? { 'width': profilePicture(), 'height': profilePicture(), 'font-size': '14px' } : {}">
+              {{ fullName() }}
+            </div>
+        } @else {
+            <img [src]="userPhoto()" [width]="profilePicture()" height="profilePicture()">
+        }
+        <div class="header-text" [class.hide-header-text]="isCollapsed()">
+          <span class="user-fullname">{{ userName() }}</span>
+          <span class="user-role">
+              @if(isAdmin()) {
+                  Administrador
+              } @else {
+                  Paciente
+              }
+          </span>
+        </div>
+    </div>
+    <mat-nav-list>
+        @for (item of items(); track $index) {
+          @if (item.name === 'Administrador') {
+            @if (isAdmin()) {
+              <a mat-list-item routerLinkActive="" [routerLink]="item.route">
+                <mat-icon matListItemIcon class="material-symbols-sharp">{{ item.icon }}</mat-icon>
+                @if(!isCollapsed()) {
+                  <span>{{ item.name }}</span>
+                }
+              </a>
+            }
+          } @else {
+            <a mat-list-item [routerLink]="item.route" routerLinkActive="">
+              <mat-icon matListItemIcon class="material-symbols-sharp">{{ item.icon }}</mat-icon>
+              @if(!isCollapsed()) {
+                <span>{{ item.name }}</span>
+              }
+            </a>
+          }
+        }
+      </mat-nav-list>
+</div>

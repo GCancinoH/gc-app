@@ -1,6 +1,8 @@
 import { Component, computed, effect, input, OnInit, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgStyle } from '@angular/common';
 
 interface  SidenavMenu {
   name: string;
@@ -12,6 +14,7 @@ interface  SidenavMenu {
   selector: 'sidenav-content',
   standalone: true,
   imports: [
+    RouterLinkActive, RouterLink, NgStyle,
     MatListModule, MatIcon
   ],
   templateUrl: './sidenav-content.component.html',
@@ -23,6 +26,9 @@ export class SidenavContent implements OnInit {
   userName = input<string | null | undefined>(null);
   isAdmin = input<boolean>(false);
   isCollapsed = input<boolean>(false);
+  profilePicture = computed(() => {
+    return this.isCollapsed() ? '32px' : '100px';
+  });
   // Variables
   fullName = computed(() => {
     const userNameValue = this.userName();
@@ -30,14 +36,14 @@ export class SidenavContent implements OnInit {
   });
   items = signal<SidenavMenu[]>([
     {
-      name: 'Administrador',
+      name: 'Administración',
       icon: 'shield_person',
-      route: 'admin'
+      route: 'inner'
     },
     {
       name: 'Dashboard',
       icon: 'dashboard',
-      route: 'dashboard'
+      route: 'u/dashboard'
     },
     {
       name: 'Weight',

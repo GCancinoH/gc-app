@@ -1,22 +1,4 @@
 import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { Observable, Subscription, first, map, of, shareReplay, switchMap, take } from 'rxjs';
-import { AuthService } from '../../../core/services/auth.service';
-import { User, user } from '@angular/fire/auth';
-import { AsyncPipe, JsonPipe } from '@angular/common';
-import { Router } from '@angular/router';
-import { DashboardToolbar } from './utils/toolbar/toolbar.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { SidenavContent } from './utils/sidenav-content/sidenav-content.component';
-import { MatFabButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { AddWeightComponent } from './features/core/bottom-sheets/add-weight/add-weight.component';
-import { TitleService } from '@core/title/title.service';
-import { traceUntilFirst } from '@angular/fire/performance';
-import { DocumentData, Firestore, Timestamp, collection, collectionChanges, collectionData, collectionSnapshots, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
-import { ComposeInfoCard } from '@core/components/info-cards/info-cards.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface UserInfo {
   uid: string;
@@ -30,11 +12,7 @@ export interface UserInfo {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    JsonPipe, AsyncPipe,
-    MatSidenavModule, MatFabButton, MatIcon, MatMenuModule,
-    DashboardToolbar, SidenavContent, ComposeInfoCard
-  ],
+  imports: [],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -54,6 +32,9 @@ export class DashboardComponent implements OnInit {
   sideNavWidth = computed(() => {
     return this.isSidenavCollapsed() ? '65px' : '250px';
   });
+  profilePicWidth = computed(() => {
+    return this.isSidenavCollapsed() ? '32px' : '100px';
+  })
   user$!: Observable<User | null>;
   public bodyCompDocExists$!: Observable<any>;
 
@@ -101,8 +82,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/auth']);
   }
 
-  onToggleSidenav(collapsed: boolean) {
-    this.isSidenavCollapsed.set(collapsed);
+  onToggleSidenav() {
+    this.isSidenavCollapsed.set(!this.isSidenavCollapsed())
   }
 
   openAddWeightBottomSheet() {

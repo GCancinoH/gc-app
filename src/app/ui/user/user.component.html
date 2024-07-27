@@ -1,4 +1,34 @@
-<p>Dashboard works</p>
+<!-- Toolbar -->
+<mat-toolbar class="mat-elevation-z3" style="background-color: black;">
+    <button mat-icon-button (click)="isSidenavCollapsed.set(!isSidenavCollapsed())">
+        <mat-icon style="color: white">menu</mat-icon>
+    </button>
+    <span class="app-title">GC App</span>
+    <span class="spacer"></span>
+</mat-toolbar> <!-- ./End Toolbar -->
+<!-- Sidenav Container -->
+<mat-sidenav-container>
+    <mat-sidenav opened mode="side" [style.width]="sideNavWidth()" class="main-nav">
+        <sidenav-content 
+            [userName]="(user$ | async)?.displayName"
+            [userPhoto]="(user$ | async)?.photoURL"
+            [isAdmin]="isAdmin()"
+            [isCollapsed]="isSidenavCollapsed()"
+        />
+    </mat-sidenav>
+    <mat-sidenav-content class="content" [style.margin-left]="sideNavWidth()">
+        <router-outlet/>
+        <button mat-fab class="fab-button" [matMenuTriggerFor]="fabMenu">
+            <mat-icon style="color: white;">add_circle</mat-icon>
+        </button>
+        <mat-menu #fabMenu="matMenu">
+            <button mat-menu-item (click)="openAddWeightBottomSheet()">
+                <mat-icon class="material-symbols-sharp">monitor_weight_gain</mat-icon>
+                <span>Guardar peso de hoy</span>
+            </button>
+        </mat-menu>
+    </mat-sidenav-content>
+</mat-sidenav-container><!-- ./End Sidenav Container-->
 
 <!--<mat-toolbar class="mat-elevation-z3" style="background-color: black;">
     <button mat-icon-button (click)="onToggleSidenav()">
@@ -52,4 +82,5 @@
         </mat-menu>
     </mat-sidenav-content>
 </mat-sidenav-container>-->
+
 

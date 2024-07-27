@@ -16,17 +16,19 @@ export const routes: Routes = [
         'path': '', redirectTo: 'auth', pathMatch: 'full'
     },
     {
-        path: 'u/dashboard',
-        loadComponent: () => import('./ui/user/dashboard/dashboard.component').then(c => c.DashboardComponent),
-        ...canActivate(redirectUnauthorizedUsers)
-    },
-    {
         path: 'auth/next-steps',
         loadComponent: () => import('./ui/auth/next-steps/next-steps.component').then(c => c.NextStepsComponent),
     },
     {
         path: 'auth/authenticate',
         loadComponent: () => import('./ui/auth/authenticate/authenticate.component').then(c => c.AuthenticateComponent)
+    },
+    {
+        path: 'u',
+        loadComponent: () => import('./ui/user/user.component').then(c => c.UserComponent),
+        children: [
+            
+        ],
+        ...canActivate(redirectUnauthorizedUsers)
     }
-
 ];

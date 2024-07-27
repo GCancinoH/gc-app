@@ -31,3 +31,13 @@
     font-size:14px;
     font-style: italic;
 }
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+.hide-header-text {
+    opacity: 0;
+    height: 0;
+}
