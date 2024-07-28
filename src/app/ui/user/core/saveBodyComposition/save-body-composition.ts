@@ -40,15 +40,15 @@ interface Response {
     MatFormFieldModule, MatInputModule, MatButton, MatIcon,
     ComposeLayout, ComposeLoading
   ],
-  templateUrl: './add-weight.component.html',
-  styleUrl: './add-weight.component.css'
+  templateUrl: './save-body.composition.html',
+  styleUrl: './save-body-composition.css'
 })
-export class AddWeightComponent {
+export class SaveBodyCompositionSheet {
   // Injects
   fb = inject(FormBuilder);
   http = inject(HttpClient);
   authSrv = inject(AuthService);
-  bottomSheetRef = inject(MatBottomSheetRef<AddWeightComponent>);
+  bottomSheetRef = inject(MatBottomSheetRef<SaveBodyCompositionSheet>);
   db = inject(Firestore);
   snackBar = inject(MatSnackBar);
   // Variables

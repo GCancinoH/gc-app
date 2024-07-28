@@ -7,7 +7,6 @@ import { TitleService } from '../../core/title/title.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from '../../core/services/auth.service';
-import { Router } from '@angular/router';
 import { TranslatePipe } from '../../core/translation/translate.pipe';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '../../core/translation/translation.service';

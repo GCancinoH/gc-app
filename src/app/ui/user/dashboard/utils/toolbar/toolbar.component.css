@@ -1,9 +1,0 @@
-mat-toolbar {
-    position: relative;
-    z-index: 5;
-}
-.app-title {
-    margin-left: 10px;
-    color: white;
-}
-.spacer { flex: 1 1 auto; }

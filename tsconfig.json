@@ -25,7 +25,7 @@
       "@features/*": ["./src/app/ui/*"],
       "@core/*": ["./src/app/core/*"],
       "@compose-ui/*": ["./src/app/core/components/*"],
-      "@user-core/*": ["./src/app/ui/user/- core/*"]
+      "@user-core/*": ["./src/app/ui/user/core/*"]
     }
   },
   "angularCompilerOptions": {

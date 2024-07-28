@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { User } from '@angular/fire/auth';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -9,8 +10,9 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/mat
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { SidenavContent } from '@user-core/sidenav-content/sidenav-content.component';
+import { SidenavContent } from '@features/user/core/sidenav-content/sidenav-content.component';
 import { Observable } from 'rxjs';
+import { SaveBodyCompositionSheet } from './core/saveBodyComposition/save-body-composition';
 
 @Component({
   selector: 'app-user',
@@ -30,6 +32,7 @@ export class UserComponent implements OnInit
   // Injects
   authSrv = inject(AuthService);
   destroyRef = inject(DestroyRef);
+  bottomSheet = inject(MatBottomSheet);
   // Signals
   isAdmin = signal<boolean>(false);
   isSidenavCollapsed = signal<boolean>(false);
@@ -61,8 +64,6 @@ export class UserComponent implements OnInit
     });
   }
 
-  openAddWeightBottomSheet() {
-    
-  }
+  openAddWeightBottomSheet(): void { this.bottomSheet.open(SaveBodyCompositionSheet) }
 
 }
