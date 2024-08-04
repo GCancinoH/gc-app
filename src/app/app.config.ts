@@ -9,7 +9,7 @@ import { getFirestore, persistentLocalCache, provideFirestore, } from '@angular/
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideHttpClient } from '@angular/common/http';
-import { provideTranslations } from './core/translation/translation.provider';
+import { provideTranslations } from './domain/services/translator/translation.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [

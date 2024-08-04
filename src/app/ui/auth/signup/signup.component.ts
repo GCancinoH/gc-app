@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 /* Other Imports */
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { TranslatePipe } from '../../../core/translation/translate.pipe';
+import { TranslatePipe } from '../../../domain/services/translator/translate.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';

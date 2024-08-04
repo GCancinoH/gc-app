@@ -30,7 +30,7 @@
               </a>
             }
           } @else {
-            <a mat-list-item [routerLink]="item.route" routerLinkActive="">
+            <a mat-list-item routerLinkActive="">
               <mat-icon matListItemIcon class="material-symbols-sharp">{{ item.icon }}</mat-icon>
               @if(!isCollapsed()) {
                 <span>{{ item.name }}</span>

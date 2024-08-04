@@ -1,0 +1,13 @@
+<section class="auth-wrapper">
+    @if(isSignInViewActive()) {
+        @defer (when isSignInViewActive()) {
+            <sign-in (loadingState)="changeState($event)" />
+        }
+    } @else {
+        @defer (when !isSignInViewActive()) {
+            <sign-up (authChangeState)="changeState($event)" />
+        }
+    }
+    
+</section>
+

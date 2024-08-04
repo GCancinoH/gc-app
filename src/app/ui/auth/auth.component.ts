@@ -6,10 +6,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TitleService } from '../../core/title/title.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { AuthService } from '../../core/services/auth.service';
-import { TranslatePipe } from '../../core/translation/translate.pipe';
+import { AuthService } from '../../domain/services/auth/auth.service';
+import { TranslatePipe } from '../../domain/services/translator/translate.pipe';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslationService } from '../../core/translation/translation.service';
+import { TranslationService } from '../../domain/services/translator/translation.service';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 

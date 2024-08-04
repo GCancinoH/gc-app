@@ -3,11 +3,16 @@ import { canActivate, hasCustomClaim, redirectUnauthorizedTo, redirectLoggedInTo
 
 const adminOnly = () => hasCustomClaim('admin');
 const redirectUnauthorizedUsers = () => redirectUnauthorizedTo(['/auth']);
-const redirectLoggedInUsers = () => redirectLoggedInTo(['/u']);
+const redirectLoggedInUsers = () => redirectLoggedInTo(['/u/dashboard']);
 const redirectVerifiedUsers = () => emailVerified;
 
 export const routes: Routes = [
     {
+        path: 'auth',
+        loadChildren: () => import('./shell/shell.auth').then(m => m.AUTH_ROUTES)
+    },
+    { 'path': '', redirectTo: 'auth', pathMatch: 'full' },
+    /*{
         path: 'auth',
         loadComponent: () => import('./ui/auth/auth.component').then(c => c.AuthComponent),
         ...canActivate(redirectLoggedInUsers)
@@ -22,10 +27,13 @@ export const routes: Routes = [
         loadComponent: () => import('./ui/auth/authenticate/authenticate.component').then(c => c.AuthenticateComponent)
     },
     {
-        path: 'user',
-        loadChildren: () => import('./ui/user/user.routes').then(m => m.USER_ROUTES)
+        path: 'u',
+        loadComponent: () => import('./ui/user/user.component').then(c => c.UserComponent),
+        loadChildren: () => import('./ui/user/user.routes').then(m => m.USER_ROUTES),
+        ...canActivate(redirectUnauthorizedUsers),
+        ...canActivate(redirectVerifiedUsers)
     }
-    
+*/    
 ];
 
 

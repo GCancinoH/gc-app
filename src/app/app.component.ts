@@ -4,11 +4,10 @@ import localeEsMx from '@angular/common/locales/es-MX';
 import localeEn from '@angular/common/locales/en';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { TitleService } from './core/title/title.service';
-import { appInitialization } from '@core/init';
-import { NetworkService } from '@core/services/network.service';
+import { NetworkService } from '@domain/services/network/network.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
-import { TranslationService } from '@core/translation/translation.service';
+import { TranslationService } from '@domain/services/translator/translation.service';
 
 @Component({
   selector: 'app-root',
@@ -23,28 +22,25 @@ import { TranslationService } from '@core/translation/translation.service';
   ],
 })
 export class AppComponent implements OnInit {
+  // Injectors
   titleSrv = inject(TitleService);
   networkSrv = inject(NetworkService);
   translator = inject(TranslationService);
-  isOnline!: boolean;
   destroyRef = inject(DestroyRef);
+  // Variables
+  isOnline!: boolean;
+  // Signals
 
   constructor() { 
     this.isOnline = navigator.onLine;
+    console.log("Network is: ", this.isOnline ? "Online" : "Offline");
     this.setLocale();
   }
 
   ngOnInit(): void {
     this.titleSrv.setTitle('Home');
-    appInitialization();
-    this.networkSrv.isOnline$.pipe(
-      takeUntilDestroyed(this.destroyRef),
-      switchMap(isOnline => {
-        this.isOnline = isOnline;
-        console.log(this.isOnline);
-        return this.networkSrv.isOnline$;
-      })
-    )    
+    //appInitialization();
+    // Check network connection   
   }
 
   private setLocale(): void {

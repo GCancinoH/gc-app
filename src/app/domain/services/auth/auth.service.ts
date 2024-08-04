@@ -5,11 +5,11 @@ import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, IdTok
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, map, of, shareReplay, switchMap, take, throwError } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
-import { config } from '../const';
-import { TranslationService } from '../translation/translation.service';
-import { AuthResponse } from '../models/auth.interfaces';
+import { config } from '../../../core/const';
+import { TranslationService } from '../translator/translation.service';
+import { AuthResponse } from '../../../core/models/auth.interfaces';
 import { initializeDatabase } from '@core/db/auth.db';
-import { LocalDBService } from './localDB.service';
+import { LocalDBService } from '../../../core/services/localDB.service';
 import { Patient } from '@core/models/patient';
 
 @Injectable({

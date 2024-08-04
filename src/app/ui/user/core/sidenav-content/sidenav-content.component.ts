@@ -43,22 +43,22 @@ export class SidenavContent implements OnInit {
     {
       name: 'Dashboard',
       icon: 'dashboard',
-      route: 'u/dashboard'
+      route: 'dashboard'
     },
     {
       name: 'Weight',
       icon: 'monitor_weight',
-      route: 'clientes'
+      route: 'weight-logger'
     },
     {
       name: 'Training Plan',
       icon: 'exercise',
-      route: 'workout'
+      route: 'training'
     },
     {
       name: 'Nutrition Plan',
       icon: 'nutrition',
-      route: 'nutrition'
+      route: 'nutrition-plan'
     }
   ]);
 
