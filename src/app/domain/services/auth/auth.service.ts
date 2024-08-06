@@ -1,169 +1,97 @@
-import { HttpClient } from '@angular/common/http';
-import { DestroyRef, Injectable, effect, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Auth, User, authState, signInWithEmailAndPassword, signOut, user, IdTokenResult, idToken, getIdTokenResult } from '@angular/fire/auth';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, Subscription, catchError, firstValueFrom, map, of, shareReplay, switchMap, take, throwError } from 'rxjs';
-import { FirebaseError } from '@angular/fire/app';
-import { config } from '../../../core/const';
-import { TranslationService } from '../translator/translation.service';
-import { AuthResponse } from '../../../core/models/auth.interfaces';
-import { initializeDatabase } from '@core/db/auth.db';
-import { LocalDBService } from '../../../core/services/localDB.service';
-import { Patient } from '@core/models/patient';
+import { DestroyRef, Injectable, inject, signal } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+// Angular Fire
+import { Auth, UserCredential, authState, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
+import { Firestore, collection, getDocs, query, where } from "@angular/fire/firestore";
+import { Patient } from "@domain/models/patient/patient.model";
+// Rxjs
+import { Observable, Subscription, catchError, from, map, of, switchMap, tap, throwError } from "rxjs";
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Inject
+  // Injectors
   auth = inject(Auth);
-  snackBar = inject(MatSnackBar);
-  errorMessage = signal<string>('');
-  authState$ = authState(this.auth);
-  user$ = user(this.auth);
-  userOb$!: Observable<User | null>;
-  httpClient = inject(HttpClient);
+  db = inject(Firestore);
   destroyRef = inject(DestroyRef);
-  translator = inject(TranslationService);
-  localDB = inject(LocalDBService);
+  // Signals
+  userObject = signal<Patient | null>(null);
+  // Observables
+  authState$ = authState(this.auth);
+  user$ = Subscription;
   // Variables
-  res!: AuthResponse;
-  public currentUser = signal<User | null>(null);
-  userSubscription!: Subscription;
-
+  patientsCollection = collection(this.db, 'patients');
+  
   // Methods
-  constructor() {
-    effect(() => {
-      this.authState$.subscribe((user: User) => {
-        if(user) {
-          this.currentUser.set(user);
-        }
-      });
-    })
-  }
-
-  public getCurrentUser(): User | null
+  signInWithEmailAndPass(email: string, password: string) : Observable<UserCredential>
   {
-    return this.currentUser();
-  }
-
-  async signInWithEmailAndPass(email: string, password: string): Promise<AuthResponse> {
-    try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      const { user } = userCredential;
-
-      if (!user.emailVerified) {
-        let err = this.translator.getTranslation('auth.login.email_not_verified');
-        this.signOut();
-        return {
-          success: false,
-          error: err
-        };
-      }
-
-      let idToken = '';
-      idToken = await user.getIdToken();
-      // Handle the http request
-      const res = await firstValueFrom(
-        this.httpClient.post<AuthResponse>('https://gc-nutrition.vercel.app/v1/api/verifyIDToken', { idToken })
-      );
-      try {
-        const ifUserCreated = await this.localDB.findInUser({ uid: user.uid});
-        if (!ifUserCreated) {
-          await this.localDB.insertIntoUser({
-            uid: user.uid,
-            email: user.email,
-            name: user.displayName,
-            photoURL: user.photoURL,
-            emailVerified: user.emailVerified,
-            token: idToken,
-            isLoggedIn: true
-          });
-        } else {
-          this.localDB.updateUser({
-            key: 'uid',
-            val: user.uid
-          }, {isLoggedIn: true});
-        }
-      } catch (err) {
-        console.error(err);
-        return {
-          success: false,
-          message: err as string};
-      }
-      return res;
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case 'auth/invalid-email':
-            return {
-              success: false,
-              error: this.translator.getTranslation('auth.errors.invalid-email')
-            };
-          case 'auth/user-disabled':
-            return {
-              success: false,
-              error: this.translator.getTranslation('auth.errors.user-disabled')
-            };
-          case 'auth/user-not-found':
-            return {
-              success: false,
-              error: this.translator.getTranslation('auth.errors.user-not-found')
-            };
-          case 'auth/wrong-password':
-            return {
-              success: false,
-              error: this.translator.getTranslation('auth.errors.wrong-pass')
-            };
-          case 'auth/invalid-credential':
-            return {
-              success: false,
-              error: this.translator.getTranslation('auth.errors.invalid-credentials')
-            };
-          default:
-            console.error('Error signing in:', error);
-            return {
-              success: false,
-              error: 'An unexpected error occurred'
-            };
-        }
-      } else {
+    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
+      tap(userCredentials => console.log('User signed in:', userCredentials.user.uid)),
+      catchError(error => {
         console.error('Error signing in:', error);
-        return {
-          success: false,
-          error: 'An unexpected error occurred'
-        };
-      }
-    }
+        return throwError(() => new Error('Sign in failed. Please check your credentials.'));
+      }),
+      map(userCredentials => { return userCredentials })
+    );
   }
 
-  signOut()
-  {
-    return signOut(this.auth);
-  }
-
-  getCustomClaims() {
-    return this.authState$.pipe(
-      take(1),
-      switchMap((user: User | null) => {
-        return of(user);
+  checkIfTheEmailExistsInDB(email: string | null): Observable<boolean> {
+    return this.getUserFromLocalStorage().pipe(
+      switchMap(cachedData => {
+        if (cachedData && cachedData.email === email) {
+          this.userObject.set(cachedData); // Set the user object (doesn't return anything)
+          return of(true); // Emit true to signal email exists
+        } else {
+          return this.getUserFromFirestore(email); // Forward the existing observable
+        }
       })
     );
   }
 
-  createNewPatient(email: string, password: string, name: string): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(config.serverURL + 'createNewAdmin', { email, password, name })
-      .pipe(
-        catchError(err => {
-          const res: AuthResponse = {
-            message: err.message,
-            success: false
-          };
-          return throwError(() => res);
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      );
+  signOut() : Observable<boolean>
+  {
+    return from(signOut(this.auth)).pipe(
+      map(() => {
+        this.removeUserFromLocalDB();
+        return true
+      })
+    )
   }
 
+  private getUserFromLocalStorage() : Observable<Patient | null>
+  {
+    const cachedData = localStorage.getItem('currentUser');
+    return cachedData ? of(JSON.parse(cachedData)) : of(null);
+  }
+
+  private getUserFromFirestore(email: string | null) : Observable<boolean>
+  {
+    const q = query(this.patientsCollection, where('email', '==', email));
+    
+    return from(getDocs(q)).pipe(
+      map(snapshot => {
+        if(!snapshot.empty) {
+          const userData = snapshot.docs[0].data() as Patient;
+          this.saveUserIntoLocalDB(userData);
+          return true;
+        } else {
+          return false;
+        }
+      })
+    )
+  }
+
+  private saveUserIntoLocalDB(user: Patient)
+  {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
+  private removeUserFromLocalDB() 
+  {
+    localStorage.removeItem('currentUser');
+  }
+  
 }

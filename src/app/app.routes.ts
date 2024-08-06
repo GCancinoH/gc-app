@@ -11,7 +11,11 @@ export const routes: Routes = [
         path: 'auth',
         loadChildren: () => import('./shell/shell.auth').then(m => m.AUTH_ROUTES)
     },
-    { 'path': '', redirectTo: 'auth', pathMatch: 'full' },
+    {
+        path: '',
+        loadComponent: () => import('./features/main/main/main.component').then(c => c.MainComponent)
+    }
+    //{ 'path': '', redirectTo: 'auth', pathMatch: 'full' },
     /*{
         path: 'auth',
         loadComponent: () => import('./ui/auth/auth.component').then(c => c.AuthComponent),

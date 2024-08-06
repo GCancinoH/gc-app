@@ -1,0 +1,21 @@
+<section id="pricing" class="pricing-section">
+    <h2>Our Pricing Plans</h2>
+    @defer (on viewport) {  
+        <div class="pricing-wrapper">
+            @for (pricePlan of pricingPlans; track $index) {
+                <div class="pricing-card" @cardAnimation>
+                    <h3>{{ pricePlan.name }}</h3>
+                    <p>Price: ${{ pricePlan.price }}</p>
+                    <ul>
+                        @for (feature of pricePlan.features; track $index) {
+                            <li>{{ feature }}</li>
+                        }
+                    </ul>
+                    <button class="cta-button">Get Started</button>
+                </div>
+            }
+        </div>
+    } @placeholder { 
+        <div>Calendar placeholder</div>
+    }
+</section>
