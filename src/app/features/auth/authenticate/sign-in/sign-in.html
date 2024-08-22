@@ -2,39 +2,48 @@
     @if(isLoading()) {
         <mat-progress-bar [mode]="'query'" class="auth-progress"></mat-progress-bar>
     }
-    <div class="auth-info-wrapper">
-        <div class="auth-info">
-            <img src="images/logo/nut-app-logo.png" alt="Logo" width="70" />
-            <span class="auth-state">
-                AUTH_SIGN_IN
-            </span>
-            <button mat-button class="auth-google-btn">
-                <fa-icon [icon]="googleIcn" class="auth-google-icn" />
-                CONTINUE_WITH_GOOGLE
-            </button>
-        </div>
-        <div class="auth-form">
-            <form class="auth-signin-form" (ngSubmit)="onSignIn()">
-                <mat-form-field appearance="outline" class="auth-input">
-                    <mat-label>{{ 'auth.login.email-field' }}</mat-label>
-                    <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
-                    <mat-icon matSuffix>alternate_email</mat-icon>
-                </mat-form-field>
-                <button mat-button type="button">Forgot Password?</button>
-                <div class="auth-bottom-buttons">
-                    <button 
-                        mat-raised-button 
-                        class="auth-text-general"
-                        (click)="onChangeState()"
-                        type="button">Crea una cuenta</button>
-                    <button
-                        mat-flat-button 
-                        class="auth-next-btn"
-                        type="submit"
-                        [disabled]="signinForm.get('email')?.invalid"
-                    >Siguiente</button>
+    @if (signInStep() === 1) {
+        @defer(when signInStep() == 1 ) {
+            <div class="auth-info-wrapper">
+                <div class="auth-info">
+                    <img src="images/logo/nut-app-logo.png" alt="Logo" width="70" />
+                    <span class="auth-state">
+                        AUTH_SIGN_IN
+                    </span>
+                    <button mat-button class="auth-google-btn">
+                        <fa-icon [icon]="googleIcn" class="auth-google-icn" />
+                        CONTINUE_WITH_GOOGLE
+                    </button>
                 </div>
-            </form>
-        </div>
-    </div>
+                <div class="auth-form">
+                    <form [formGroup]="signinForm" class="auth-signin-form" (ngSubmit)="onNext()">
+                        <mat-form-field appearance="outline" class="auth-input">
+                            <mat-label>{{ 'auth.login.email-field' }}</mat-label>
+                            <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
+                            <mat-icon matSuffix>alternate_email</mat-icon>
+                        </mat-form-field>
+                        <button mat-button type="button">Forgot Password?</button>
+                        <div class="auth-bottom-buttons">
+                            <button 
+                                mat-raised-button 
+                                class="auth-text-general"
+                                (click)="onChangeState()"
+                                type="button">Crea una cuenta</button>
+                            <button
+                                mat-flat-button 
+                                class="auth-next-btn"
+                                type="submit"
+                                [disabled]="signinForm.get('email')?.invalid"
+                            >Siguiente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+    @if (signInStep() === 2) {
+        @defer(when signInStep() == 2 ) {
+            step 2
+        }
+    }
 </mat-card>

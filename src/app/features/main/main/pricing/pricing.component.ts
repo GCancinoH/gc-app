@@ -1,6 +1,8 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { NgFor } from '@angular/common';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { NgClass, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+// Material
+import { MatButton } from '@angular/material/button';
 
 type PricingScheme = {
   name: string;
@@ -12,7 +14,7 @@ type PricingScheme = {
 @Component({
   selector: 'gc-main-pricing',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgClass, MatButton],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.css',
   animations: [
@@ -21,6 +23,12 @@ type PricingScheme = {
         style({ opacity: 0, transform: 'translateX(-50px)' }),
         animate('1s ease-out', style({ opacity: 1, transform: 'translateX(0)' })),
       ]),
+      state('popular', style({
+        backgroundColor: '#000',
+        transform: 'scale(1.03)',
+        color: 'white'
+      })),
+      transition('* <=> popular', animate('100ms ease-in-out'))
     ]),
   ],
 })

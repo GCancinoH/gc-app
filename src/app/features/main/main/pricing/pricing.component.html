@@ -3,7 +3,8 @@
     @defer (on viewport) {  
         <div class="pricing-wrapper">
             @for (pricePlan of pricingPlans; track $index) {
-                <div class="pricing-card" @cardAnimation>
+                <div class="pricing-card" 
+                    [@cardAnimation]="pricePlan.wanted ? 'popular' : ''">
                     <h3>{{ pricePlan.name }}</h3>
                     <p>Price: ${{ pricePlan.price }}</p>
                     <ul>
@@ -11,7 +12,11 @@
                             <li>{{ feature }}</li>
                         }
                     </ul>
-                    <button class="cta-button">Get Started</button>
+                    @if (pricePlan.wanted) {
+                        <button mat-flat-button class="active-btn">Get Started</button>
+                    } @else {
+                        <button mat-button>Get Started</button>
+                    }
                 </div>
             }
         </div>

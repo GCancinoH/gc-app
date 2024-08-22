@@ -7,8 +7,6 @@ import { Patient } from "@domain/models/patient/patient.model";
 // Rxjs
 import { Observable, Subscription, catchError, from, map, of, switchMap, tap, throwError } from "rxjs";
 
-
-
 @Injectable({
   providedIn: 'root'
 })
