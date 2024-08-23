@@ -1,25 +1,15 @@
 {
   "auth": {
-    "signin-choose":"Sign In",
-    "signup-choose":"Sign Up",
-    "login": {
-      "signin-btn": "Access now!",
+    "sign-in": {
+      "title": "Sign In!",
+      "continue-with-google": "Continue with Google",
       "email-field": "Email",
       "pass-field": "Password",
       "forgot-pass": "Forgot Password?",
-      "google-signin": "Sign in with Google",
-      "welcome-msg": "Welcome back",
-      "or-divider": "OR",
-      "email_not_verified": "Ypur have not verified your email. Verify it, please!"
-    },
-    "register": {
-      "welcome-msg": "¡Hello there!",
-      "name-field": "Full Name",
-      "email-field": "Email",
-      "pass-field": "Password",
-      "signup-btn": "Join us!",
-      "google-signup": "Sign up with Google",
-      "or-divider": "OR"
+      "create-account": "Create an account",
+      "next-btn": "Next",
+      "submit-btn": "Join!",
+      "welcome": "Welcome back, "
     },
     "errors": {
       "invalid-form": "The form invalid. Please check it out.",

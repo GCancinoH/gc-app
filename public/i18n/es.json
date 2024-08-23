@@ -1,25 +1,15 @@
 {
   "auth": {
-    "signin-choose":"Logéate",
-    "signup-choose":"Regístrate",
-    "login": {
-      "signin-btn": "¡Accede ahora!",
+    "sign-in": {
+      "title": "¡Inicia Sesión!",
+      "continue-with-google": "Continuar con Google",
       "email-field": "Correo Electrónico",
       "pass-field": "Contraseña",
       "forgot-pass": "¿Olvidaste tu contraseña?",
-      "google-signin": "Logéate con Google",
-      "welcome-msg": "¡Bienvenido!",
-      "or-divider": "O",
-      "email_not_verified": "Tu correo aún no está verificado. Por favor, verifica tu correo."
-    },
-    "register": {
-      "welcome-msg": "¡Hola!",
-      "name-field": "Nombre Completo",
-      "email-field": "Correo Electrónico",
-      "pass-field": "Contraseña",
-      "signup-btn": "¡Únete ahora!",
-      "google-signup": "Regístrate con Google",
-      "or-divider": "O"
+      "create-account": "Crea una cuenta",
+      "next-btn": "Siguiente",
+      "submit-btn": "¡Entrar!",
+      "welcome": "¡Bienvenido, "
     },
     "errors": {
       "invalid-form": "El formulario es inválido. Por favor revísalo.",

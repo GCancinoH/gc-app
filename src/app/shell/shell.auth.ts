@@ -5,6 +5,7 @@ export const AUTH_ROUTES: Route[] = [
         path: 'authenticate',
         loadComponent: () => import('../features/auth/authenticate/authenticate.component')
             .then(m => m.AuthenticateComponent),
+        title: "Autenticación | GC App"
     },
     {
         path: 'email-verificate',

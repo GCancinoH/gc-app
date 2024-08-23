@@ -10,13 +10,17 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+// Fire
+import { User } from '@angular/fire/auth';
 // Rxjs
+import { Observable, Subscription } from 'rxjs';
 // Otros
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from '@domain/services/auth/auth.service';
-import { Observable, Subscription } from 'rxjs';
-import { User } from '@angular/fire/auth';
+import { TranslatePipe } from '@domain/services/translator/translate.pipe';
+
 
 // RSYBQK5HLS64JEUVGHEVY7CW Twilio Recovery*
 
@@ -26,7 +30,8 @@ import { User } from '@angular/fire/auth';
   imports: [
     ReactiveFormsModule, AsyncPipe, JsonPipe,
     MatCard, MatButton, MatIcon, MatFormFieldModule, MatInputModule, MatProgressBar,
-    FontAwesomeModule
+    MatCheckboxModule,
+    FontAwesomeModule, TranslatePipe
   ],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.css'
@@ -34,7 +39,7 @@ import { User } from '@angular/fire/auth';
 export class SignInComponent {
   // Injectors
   authSrv = inject(AuthService);
-  fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
   destroyRef = inject(DestroyRef);
   // Inputs & Outputs
   loadingState = output<boolean>();
@@ -42,13 +47,15 @@ export class SignInComponent {
   isLoading = signal<boolean>(false);
   isSignInActive = signal<boolean>(true);
   signInStep = signal<number>(1);
+  patientName = signal<string | undefined>('');
   // Computed
   addOneStep = computed(() => this.signInStep() + 1);
   // Variables
   googleIcn = faGoogle;
   signinForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
+    showPassword: [false]
   });
   // Observables
   user$!: Observable<User>;
@@ -61,11 +68,14 @@ export class SignInComponent {
     this.loadingState.emit(this.isSignInActive());
   }
 
-  onNext() {
-    console.log("Initializing");
+  onNext(): void {
+    if (this.signinForm.get('email')!.invalid) {
+      this.signinForm.get('email')!.markAsDirty();
+      this.signinForm.get('email')!.markAsTouched();
+      return;
+    }
     this.isLoading.set(true);
     // Get the value of email input
-    console.log("Getting user email...");
     const patientEmail = this.signinForm.get('email')!.value;
     console.log("User email: ", patientEmail);
     // Check if the user exists or not
@@ -77,6 +87,8 @@ export class SignInComponent {
         console.log("User exists, changing the state...");
         this.signInStep.set(this.addOneStep());
         console.log("Go to step ", this.signInStep());
+        const cachedName = this.authSrv.getUserFromLocalDB()!.displayName!.split(' ')[0];
+        this.patientName.set(cachedName);
         this.isLoading.set(false);
       } else {
         this.isLoading.set(false);
@@ -86,16 +98,6 @@ export class SignInComponent {
 
   onSignIn() {
     this.isLoading.set(true);
-  }
-  
-  private getPatientName(): Observable<User> {
-    this.authSrv.authState$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((user: any) => {
-      if(user) 
-        this.user$ = user;
-    });
-    return this.user$;
   }
 }
 

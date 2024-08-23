@@ -87,6 +87,13 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
+  public getUserFromLocalDB(): Patient | null
+  {
+    const storedPatient = localStorage.getItem('currentUser');
+
+    return storedPatient ? JSON.parse(storedPatient) : null;
+  }
+
   private removeUserFromLocalDB() 
   {
     localStorage.removeItem('currentUser');
