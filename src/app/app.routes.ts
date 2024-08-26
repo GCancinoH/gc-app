@@ -9,12 +9,18 @@ const redirectVerifiedUsers = () => emailVerified;
 export const routes: Routes = [
     {
         path: 'auth',
-        loadChildren: () => import('./shell/shell.auth').then(m => m.AUTH_ROUTES)
+        loadChildren: () => import('./shell/shell.auth').then(m => m.AUTH_ROUTES),
+        ...canActivate(redirectLoggedInUsers)
     },
     {
         path: '',
         loadComponent: () => import('./features/main/main/main.component').then(c => c.MainComponent)
-    }
+    },
+    {
+        path: 'u',
+        loadComponent: () => import('./features/user/user.component').then(c => c.UserComponent),
+        loadChildren: () => import('./shell/shell.user').then(m => m.USER_ROUTES)
+    },
     //{ 'path': '', redirectTo: 'auth', pathMatch: 'full' },
     /*{
         path: 'auth',

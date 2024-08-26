@@ -20,6 +20,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from '@domain/services/auth/auth.service';
 import { TranslatePipe } from '@domain/services/translator/translate.pipe';
+import { ResponsiveDirective } from '@domain/directives/responsive.directive';
+import { NotificationService } from '@domain/services/notification/notification.service';
+import { Router } from '@angular/router';
 
 
 // RSYBQK5HLS64JEUVGHEVY7CW Twilio Recovery*
@@ -31,7 +34,7 @@ import { TranslatePipe } from '@domain/services/translator/translate.pipe';
     ReactiveFormsModule, AsyncPipe, JsonPipe,
     MatCard, MatButton, MatIcon, MatFormFieldModule, MatInputModule, MatProgressBar,
     MatCheckboxModule,
-    FontAwesomeModule, TranslatePipe
+    FontAwesomeModule, TranslatePipe, ResponsiveDirective
   ],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.css'
@@ -39,7 +42,9 @@ import { TranslatePipe } from '@domain/services/translator/translate.pipe';
 export class SignInComponent {
   // Injectors
   authSrv = inject(AuthService);
+  private readonly notifications = inject(NotificationService);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
   destroyRef = inject(DestroyRef);
   // Inputs & Outputs
   loadingState = output<boolean>();
@@ -98,6 +103,23 @@ export class SignInComponent {
 
   onSignIn() {
     this.isLoading.set(true);
+
+    if(this.signinForm.invalid) {
+      this.signinForm.markAllAsTouched();
+      this.isLoading.set(false);
+      this.notifications.showMessage("Revisa bien el formulario antes de intentar logearte.")
+      return;
+    }
+
+    const { email, password } = this.signinForm.value;
+    this.authSrv.signInWithEmailAndPass(email!, password!).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(user => {
+      this.isLoading.set(false);
+      const name = user.user.displayName?.split('')[0];
+      this.notifications.showMessage(`¡Bienvenido, ${name}!`);
+      this.router.navigate(['/u/dashboard']);
+    });
   }
 }
 

@@ -1,0 +1,68 @@
+<mat-toolbar class="user-toolbar">
+    <button mat-icon-button>
+        <mat-icon class="toolbar-item">menu</mat-icon>
+    </button>
+    <span class="toolbar-item ml8">GC App</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+        <mat-icon class="toolbar-item">notifications</mat-icon>
+    </button>
+    <button mat-icon-button>
+        <mat-icon class="toolbar-item">account_circle</mat-icon>
+    </button>
+    <button mat-icon-button>
+        <mat-icon class="toolbar-item">more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>voicemail</mat-icon>
+          <span>Check voice mail</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>Disable alerts</span>
+        </button>
+      </mat-menu>
+</mat-toolbar>
+<!-- Mat Drawer -->
+<mat-drawer-container class="user-drawer-container" autosize>
+    <mat-drawer #drawer class="user-sidenav" mode="side" opened>
+        <mat-nav-list>
+            @for (link of navLinks; track link) {
+                <a mat-list-item routerLinkActive="active-link" class="mt10">
+                    <mat-icon matListItemIcon class="material-symbols-outlined">
+                        {{ link.icon }}
+                    </mat-icon>
+                    <span matListItemTitle>{{ link.name }}</span>
+                </a>
+            }
+        </mat-nav-list>
+          
+      <!--<p>Auto-resizing sidenav</p>
+      @if (showFiller) {
+        <p>Lorem, ipsum dolor sit amet consectetur.</p>
+      }
+      <button (click)="showFiller = !showFiller" mat-raised-button>
+        Toggle extra text
+      </button>-->
+
+    </mat-drawer>
+  
+    <div class="example-sidenav-content">
+      <button type="button" mat-button (click)="drawer.toggle()">
+        Toggle sidenav
+      </button>
+    </div>
+  
+  </mat-drawer-container>  
+<!-- ./End Mat Drawe -->
+<!-- Fab Button -->
+<button mat-fab class="user-fab">
+    <mat-icon>add</mat-icon>
+</button> <!-- ./End Fab Button -->
+<router-outlet></router-outlet>
+

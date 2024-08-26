@@ -61,12 +61,16 @@
 .auth-text-general { color: #000 !important; }
 
 @media (max-width: 1024px) {
-    .auth-card {
-      width: 100%;
-
-    }
+    
 }
 
 @media (max-width: 768px) {
+    .auth-card {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .auth-info-wrapper { order: 1; }
+      .auth-form { order: 1; }
 
 }
