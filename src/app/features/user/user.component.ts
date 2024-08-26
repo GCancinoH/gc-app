@@ -50,6 +50,16 @@ export class UserComponent {
         name: 'Entrenamiento',
         route: '/u/profile',
         icon: 'exercise'
+      },
+      {
+        name: 'Lector Código de Barras',
+        route: '/u/barcode-scanner',
+        icon: 'barcode_scanner'
+      },
+      {
+        name: 'Análisis de Etiqueta',
+        route: '/u/nutrition-label-analysis',
+        icon: 'search_insights'
       }
     ]
   }

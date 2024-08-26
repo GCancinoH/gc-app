@@ -1,6 +1,10 @@
 <mat-toolbar class="user-toolbar">
-    <button mat-icon-button>
+    <button mat-icon-button (click)="drawer.toggle()">
+      @if(drawer.opened) {
+        <mat-icon class="toolbar-item">close</mat-icon>
+      } @else {
         <mat-icon class="toolbar-item">menu</mat-icon>
+      }
     </button>
     <span class="toolbar-item ml8">GC App</span>
     <span class="spacer"></span>
@@ -41,21 +45,10 @@
                 </a>
             }
         </mat-nav-list>
-          
-      <!--<p>Auto-resizing sidenav</p>
-      @if (showFiller) {
-        <p>Lorem, ipsum dolor sit amet consectetur.</p>
-      }
-      <button (click)="showFiller = !showFiller" mat-raised-button>
-        Toggle extra text
-      </button>-->
-
     </mat-drawer>
   
-    <div class="example-sidenav-content">
-      <button type="button" mat-button (click)="drawer.toggle()">
-        Toggle sidenav
-      </button>
+    <div class="user-drawer-content">
+      <router-outlet></router-outlet>
     </div>
   
   </mat-drawer-container>  
@@ -64,5 +57,4 @@
 <button mat-fab class="user-fab">
     <mat-icon>add</mat-icon>
 </button> <!-- ./End Fab Button -->
-<router-outlet></router-outlet>
 
