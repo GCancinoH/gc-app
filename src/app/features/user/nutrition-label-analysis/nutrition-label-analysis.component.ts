@@ -1,9 +1,13 @@
 import { Component, ElementRef, signal, viewChild } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
   selector: 'gc-nutrition-label-analysis',
   standalone: true,
-  imports: [],
+  imports: [
+    MatIcon, MatMiniFabButton
+  ],
   templateUrl: './nutrition-label-analysis.component.html',
   styleUrl: './nutrition-label-analysis.component.css'
 })

@@ -1,8 +1,8 @@
 @if(captureImage() == null) {
     <div class="camera-container">
         <video #video [hidden]="captureImage()" autoplay playsinline></video>
-        <button class="capture-btn" (click)="captureImage()">
-          <i class="fas fa-camera"></i>
+        <button mat-mini-fab (click)="captureImage()">
+          <mat-icon>photo_camera</mat-icon>
         </button>
       </div>
 }
