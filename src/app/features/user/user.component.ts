@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 // Material
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +20,7 @@ interface NavLinks {
   selector: 'gc-user',
   standalone: true,
   imports: [
-    RouterOutlet,
+    RouterOutlet, RouterLink, RouterLinkActive,
     MatToolbar, MatSidenavModule, MatButton, MatFabButton, MatIcon, MatIconButton,
     MatMenuModule, MatNavList, MatListItem, MatListItemIcon, MatListItemTitle
   ],

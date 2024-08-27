@@ -1,0 +1,22 @@
+@if(captureImage() == null) {
+    <div class="camera-container">
+        <video #video [hidden]="captureImage()" autoplay playsinline></video>
+        <button class="capture-btn" (click)="captureImage()">
+          <i class="fas fa-camera"></i>
+        </button>
+      </div>
+}
+
+@if(captureImage() != null) {
+    <div class="preview-container">
+        <img [src]="captureImage()" alt="Captured nutrition label" />
+        <div class="button-container">
+          <button class="delete-btn" (click)="retakePhoto()">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button class="done-btn" (click)="sendToServer()">
+            <i class="fas fa-check"></i> Done
+          </button>
+        </div>
+      </div>
+}

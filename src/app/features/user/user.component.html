@@ -37,7 +37,7 @@
     <mat-drawer #drawer class="user-sidenav" mode="side" opened>
         <mat-nav-list>
             @for (link of navLinks; track link) {
-                <a mat-list-item routerLinkActive="active-link" class="mt10">
+                <a mat-list-item [routerLink]="link.route" routerLinkActive="active-link" class="mt10">
                     <mat-icon matListItemIcon class="material-symbols-outlined">
                         {{ link.icon }}
                     </mat-icon>
@@ -52,7 +52,7 @@
     </div>
   
   </mat-drawer-container>  
-<!-- ./End Mat Drawe -->
+<!-- ./End Mat Drawer -->
 <!-- Fab Button -->
 <button mat-fab class="user-fab">
     <mat-icon>add</mat-icon>

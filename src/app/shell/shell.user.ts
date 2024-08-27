@@ -10,6 +10,12 @@ export const USER_ROUTES: Route[] = [
         title: "Dashboard | GC App",
     },
     {
+        path: 'nutrition-label-analysis',
+        loadComponent: () => import('../features/user/nutrition-label-analysis/nutrition-label-analysis.component')
+            .then(m => m.NutritionLabelAnalysisComponent),
+        title: "Nutrition Label Analysis | GC App",
+    },
+    {
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard',
