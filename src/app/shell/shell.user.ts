@@ -16,6 +16,24 @@ export const USER_ROUTES: Route[] = [
         title: "Nutrition Label Analysis | GC App",
     },
     {
+        path: 'barcode-scanner',
+        loadComponent: () => import('../features/user/barcode-scanner/barcode-scanner.component')
+            .then(m => m.BarcodeScannerComponent),
+        title: "Barcode Scanner | GC App",
+    },
+    {
+        path: 'nutrition',
+        loadComponent: () => import('../features/user/nutrition/nutrition.component')
+            .then(m => m.NutritionComponent),
+        title: "Nutrition | GC App",
+    },
+    {
+        path: 'training',
+        loadComponent: () => import('../features/user/training/training.component')
+            .then(m => m.TrainingComponent),
+        title: "Training | GC App",
+    },
+    {
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard',

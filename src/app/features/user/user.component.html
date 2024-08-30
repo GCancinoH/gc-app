@@ -34,10 +34,10 @@
 </mat-toolbar>
 <!-- Mat Drawer -->
 <mat-drawer-container class="user-drawer-container" autosize>
-    <mat-drawer #drawer class="user-sidenav" mode="side" opened>
+    <mat-drawer #drawer class="user-sidenav" mode="side" [opened]="(navbarOpened$ | async)">
         <mat-nav-list>
             @for (link of navLinks; track link) {
-                <a mat-list-item [routerLink]="link.route" routerLinkActive="active-link" class="mt10">
+                <a mat-list-item [routerLink]="link.route" routerLinkActive="active-link" class="mt10" (click)="closeIfMobile()">
                     <mat-icon matListItemIcon class="material-symbols-outlined">
                         {{ link.icon }}
                     </mat-icon>
@@ -54,7 +54,17 @@
   </mat-drawer-container>  
 <!-- ./End Mat Drawer -->
 <!-- Fab Button -->
-<button mat-fab class="user-fab">
+<button mat-fab class="user-fab" [matMenuTriggerFor]="fabMenu">
     <mat-icon>add</mat-icon>
 </button> <!-- ./End Fab Button -->
-
+<!-- Fab Menu -->
+<mat-menu #fabMenu="matMenu">
+  <button mat-menu-item (click)="openBloodPressureSheet()">
+    <mat-icon class="material-symbols-outlined">blood_pressure</mat-icon>
+    <span>Registrar Presión Arterial</span>
+  </button>
+  <button mat-menu-item (click)="openBodyCompositionSheet()">
+    <mat-icon>monitor_weight</mat-icon>
+    <span>Registrar Composición Corporal</span>
+  </button>
+</mat-menu><!-- ./End Fab Menu -->

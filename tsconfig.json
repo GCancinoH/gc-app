@@ -25,6 +25,7 @@
       "@features/*": ["./src/app/features/*"],
       "@domain/*": ["./src/app/domain/*"],
       "@shell/*": ["./src/app/shell/*"],
+      "@shared/*": ["./src/app/shared/*"],
       "@compose-ui/*": ["./src/app/libs/compose-ui/*"],
     }
   },

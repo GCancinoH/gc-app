@@ -22,7 +22,20 @@
 .user-drawer-content {
     padding: 16px;
 }
+.bottom-sheets {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #850000 !important;
+}
 .spacer { flex: 1 1 auto; }
 .ml8 { margin-left: 8px; }
 .mr8 { margin-right: 8px; }
 .mt10 { margin-top: 10px; }
+
+/* For Mobile */
+@media screen and (max-width: 768px) {
+    .user-fab {
+        bottom: 16px;
+        right: 16px;
+    }
+}

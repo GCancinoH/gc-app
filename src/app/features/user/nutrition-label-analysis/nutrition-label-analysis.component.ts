@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { Observable, Subject, from, map, of, tap } from 'rxjs';
+// Services
 
 @Component({
   selector: 'gc-nutrition-label-analysis',
@@ -97,7 +98,10 @@ export class NutritionLabelAnalysisComponent implements OnInit, OnDestroy {
         this.capturedImage$.next(imageData);
         //this.capturedImage = imageData;
       }
-      this.stopCamera().subscribe();
+      this.stopCamera().subscribe({ 
+        complete: () => console.log('Camera stopped successfully'), // Optional: Log success
+        error: (error) => console.error('Error stopping camera:', error) // Handle potential errors
+      });
     }
   }
 
