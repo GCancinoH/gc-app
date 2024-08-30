@@ -1,22 +1,24 @@
-@if(captureImage() == null) {
-    <div class="camera-container">
-        <video #video [hidden]="captureImage()" autoplay playsinline></video>
-        <button mat-mini-fab (click)="captureImage()">
-          <mat-icon>photo_camera</mat-icon>
-        </button>
-      </div>
-}
-
-@if(captureImage() != null) {
-    <div class="preview-container">
-        <img [src]="captureImage()" alt="Captured nutrition label" />
-        <div class="button-container">
-          <button class="delete-btn" (click)="retakePhoto()">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-          <button class="done-btn" (click)="sendToServer()">
-            <i class="fas fa-check"></i> Done
-          </button>
-        </div>
-      </div>
+@if(capturedImage === null) {
+  <div class="camera-container">
+    <video #video [hidden]="(capturedImage$ | async)" autoplay playsinline></video>
+    <button mat-mini-fab (click)="captureImage()">
+      <mat-icon>photo_camera</mat-icon>
+    </button>
+  </div>
+} @else {
+  <div class="preview-container">
+    @if(captureImage != null) {
+      <img [src]="capturedImage" alt="Captured nutrition label" />
+    }
+    <div class="button-container">
+      <button mat-flat-button color="primary" (click)="retakePhoto()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+      <button mat-flat-button color="warn" (click)="sendToServer()">
+        <mat-icon>send</mat-icon>
+        Done
+      </button>
+    </div>
+  </div>
 }
