@@ -1,5 +1,12 @@
 <section id="pricing" class="pricing-section">
     <h2>Our Pricing Plans</h2>
+    <mat-button-toggle-group [formControl]="timePlan" aria-label="Time Plan">
+        <mat-button-toggle value="mensual">Mensual</mat-button-toggle>
+        <mat-button-toggle value="trimestral">Trimestral</mat-button-toggle>
+        <mat-button-toggle value="semestral">Semestral</mat-button-toggle>
+        <mat-button-toggle value="anual">Anual</mat-button-toggle>
+    </mat-button-toggle-group>
+    <p>Value is: {{ timePlan.value }}</p>
     @defer (on viewport) {  
         <div class="pricing-wrapper">
             @for (pricePlan of pricingPlans; track $index) {

@@ -1,8 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Material
 import { MatButton } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 type PricingScheme = {
   name: string;
@@ -14,7 +16,7 @@ type PricingScheme = {
 @Component({
   selector: 'gc-main-pricing',
   standalone: true,
-  imports: [NgClass, MatButton],
+  imports: [NgClass, FormsModule, ReactiveFormsModule, MatButton, MatButtonToggleModule],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.css',
   animations: [
@@ -55,6 +57,7 @@ export class MainPricing {
       ],
       wanted: true
     }
-  ]
+  ];
+  timePlan = new FormControl('');
 
 }
