@@ -10,5 +10,10 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
   styleUrl: './barcode-scanner.component.css'
 })
 export class BarcodeScannerComponent {
+  codeResult: string = '';
+
+  onCodeResult(result: string) {
+    this.codeResult = result;
+  }
 
 }
