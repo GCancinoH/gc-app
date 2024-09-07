@@ -29,14 +29,14 @@ export class BarcodeScannerComponent implements OnInit {
   availableDevices!: MediaDeviceInfo[];
   deviceCurrent: MediaDeviceInfo | undefined;
   deviceSelected!: string;
-  allowedFormats: BarcodeFormat[] = [ BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.EAN_13 ];
+  allowedFormats: BarcodeFormat[] = [ BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.EAN_8 ];
   codeResult: string = '';
   hasPermission!: boolean;
   hasDevices!: boolean;
   torchEnabled = false;
   tryHarder = false;
   options: AnimationOptions = {
-    path: 'images/svg/lottie/warn.json',
+    path: 'images/lottie/warn.json',
   };
 
   // observables
@@ -69,7 +69,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   onCodeResult(result: string) {
     this.codeResult = result;
-    console.log("Scanned Result: ", this.codeResult);
+    
   }
 
   onHasPermission(has: boolean) {
@@ -84,5 +84,7 @@ export class BarcodeScannerComponent implements OnInit {
       this.torchAvailable$.next(false);
     }
   }
+
+  
 
 }
