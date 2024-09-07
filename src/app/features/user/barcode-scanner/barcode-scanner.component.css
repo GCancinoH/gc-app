@@ -11,7 +11,6 @@
     flex-direction: column;
     height: calc(100vh - 98px);
     width: 100%;
-    background-color: red;
 }
 
 .scanner {
@@ -19,3 +18,9 @@
     height: calc(100vh - 98px) !important;
     width: 100%;
 }
+:host zxing-scanner::ng-deep video {
+    height: calc(100vh - 98px);
+    width: 100%;
+    object-fit: contain;
+    box-sizing: border-box;
+  }
