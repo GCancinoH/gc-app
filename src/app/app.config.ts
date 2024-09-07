@@ -5,11 +5,12 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, persistentLocalCache, provideFirestore, } from '@angular/fire/firestore';
+import { getFirestore, provideFirestore, } from '@angular/fire/firestore';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideHttpClient } from '@angular/common/http';
 import { provideTranslations } from './domain/services/translator/translation.provider';
+import { provideLottieOptions } from 'ngx-lottie';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,5 +40,6 @@ export const appConfig: ApplicationConfig = {
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
     provideTranslations(),
+    provideLottieOptions({ player: () => import('lottie-web') })
   ]
 };

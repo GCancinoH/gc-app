@@ -31,4 +31,9 @@ export class DeviceDetectorService {
   getDeviceClass(): Observable<string> {
     return this.deviceClass$;
   }
+
+  isMobile(): boolean {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return /android|iphone|ipad|ipod/.test(userAgent);
+  }
 }

@@ -20,5 +20,10 @@
       "invalid-credentials": "Credentials are invalid: check your email and password.",
       "unexpected-error": "An unexpected error ocurred."
     }
+  },
+  "user": {
+    "barcode": {
+      "is-not-mobile": "This feature is only available in mobile devices."
+    }
   }
 }

@@ -20,5 +20,10 @@
       "invalid-credentials": "Las credenciales son inválidas: el correo o la contraseña son incorrectas.",
       "unexpected-error": "Se ha producido un error inesperado."
     }
+  },
+  "user": {
+    "barcode": {
+      "is-not-mobile": "Esta opción está disponible únicamente en dispositivos móviles."
+    }
   }
 }
