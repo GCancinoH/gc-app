@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { BarcodeFormat } from '@zxing/library';
 // Material
@@ -9,13 +9,14 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BehaviorSubject } from 'rxjs';
 import { DeviceDetectorService } from '@domain/services/device-detector/device-detector.service';
 import { TranslatePipe } from '@domain/services/translator/translate.pipe';
+import { ComposeLoading } from '@compose-ui/loading/loading.component';
 
 @Component({
   selector: 'gc-barcode-scanner',
   standalone: true,
   imports: [ 
     NgFor, 
-    TranslatePipe,
+    TranslatePipe, ComposeLoading,
     ZXingScannerModule, LottieComponent
   ],
   templateUrl: './barcode-scanner.component.html',
@@ -26,6 +27,7 @@ export class BarcodeScannerComponent implements OnInit {
   deviceDetector = inject(DeviceDetectorService);
   // variables
   isMobile: boolean = this.deviceDetector.isMobile();
+  isLoading: boolean = false;
   availableDevices!: MediaDeviceInfo[];
   deviceCurrent: MediaDeviceInfo | undefined;
   deviceSelected!: string;
@@ -45,7 +47,6 @@ export class BarcodeScannerComponent implements OnInit {
   ngOnInit(): void {
 
   }
-  
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
@@ -69,7 +70,9 @@ export class BarcodeScannerComponent implements OnInit {
 
   onCodeResult(result: string) {
     this.codeResult = result;
-    
+    if(this.codeResult != '') {
+      this.searchingBarcode(this.codeResult);
+    }
   }
 
   onHasPermission(has: boolean) {
@@ -85,6 +88,14 @@ export class BarcodeScannerComponent implements OnInit {
     }
   }
 
-  
+  /* */
+  private searchingBarcode(barcode: string) {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 3000);
+  }
+
+
 
 }

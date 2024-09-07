@@ -5,3 +5,17 @@
     justify-content: center;
     height: calc(100vh - 98px);
 }
+
+.barcode-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 98px);
+    width: 100%;
+    background-color: red;
+}
+
+.scanner {
+    object-fit: contain !important;
+    height: calc(100vh - 98px) !important;
+    width: 100%;
+}
