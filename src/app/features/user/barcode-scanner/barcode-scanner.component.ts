@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { BarcodeFormat } from '@zxing/library';
 // Material
@@ -9,7 +9,9 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BehaviorSubject } from 'rxjs';
 import { DeviceDetectorService } from '@domain/services/device-detector/device-detector.service';
 import { TranslatePipe } from '@domain/services/translator/translate.pipe';
-import { ComposeLoading } from '@compose-ui/loading/loading.component';
+import { ComposeLoading } from '@compose-ui/loading/loading';
+import { BarcodesearchService } from '@domain/services/barcode-search/barcodesearch.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'gc-barcode-scanner',
@@ -25,6 +27,8 @@ import { ComposeLoading } from '@compose-ui/loading/loading.component';
 export class BarcodeScannerComponent implements OnInit {
   // injectors
   deviceDetector = inject(DeviceDetectorService);
+  barcodeSearch = inject(BarcodesearchService);
+  destroyRef = inject(DestroyRef);
   // variables
   isMobile: boolean = this.deviceDetector.isMobile();
   isLoading: boolean = false;
@@ -40,7 +44,7 @@ export class BarcodeScannerComponent implements OnInit {
   options: AnimationOptions = {
     path: 'images/lottie/warn.json',
   };
-
+  productInfo: any;
   // observables
   torchAvailable$ = new BehaviorSubject<boolean>(false);
   
@@ -91,9 +95,24 @@ export class BarcodeScannerComponent implements OnInit {
   /* */
   private searchingBarcode(barcode: string) {
     this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 3000);
+
+    this.barcodeSearch.searchInOpenFoodFacts(barcode).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (product) => {
+        this.productInfo = product;
+        console.log('Product found:', product);
+        // Handle the product information as needed
+      },
+      error: (error) => {
+        console.error('Error searching product:', error);
+        // Handle the error (e.g., show a message to the user)
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+    
   }
 
 

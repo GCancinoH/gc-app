@@ -1,5 +1,5 @@
 <section class="barcode-wrapper">
-    @if(isMobile) {
+    @if(!isMobile) {
         <ng-container>
             <div class="not-mobile-container">
                 <ng-lottie [options]="options" width="200px"/>
@@ -37,7 +37,7 @@
             />
         } @else {
             <loading
-                text="Hola, ¿cómo estás?"
+                text="Buscando..."
                 image="searching"
             />
         }
