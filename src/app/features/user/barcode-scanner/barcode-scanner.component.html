@@ -1,5 +1,54 @@
-<section class="barcode-wrapper">
-    @if(!isMobile) {
+<p>Loading state: {{ isLoading() }}</p>
+<button (click)="searchingBarcode('3017620422003')">Click me</button>
+@if(isLoading()) {
+    @defer (when isLoading) {
+        <loading
+            text="Buscando código de barras..."
+            image="searching"
+        />
+    }
+} @else if (isMobile) {
+    <div class="not-mobile-container">
+        <ng-lottie [options]="options" width="200px"/>
+        <p>{{ 'user.barcode.is-not-mobile' | translate }}</p>
+    </div>
+} @else if (productInfo != null) {
+    <div class="product-info">
+        <pre>{{ productInfo | json }}</pre>
+    </div>
+} @else {
+    <!-- Scanner and permission checks -->
+    @if (hasPermission === undefined) {
+        <ng-container>
+            <h2>Waiting for permissions.</h2>
+            <blockquote>
+                If your device does not has cameras, no permissions will be asked.
+            </blockquote>
+        </ng-container>
+    } @else if (hasPermission === false) {
+        <ng-container>
+            <h2>No devices were found.</h2>
+            <blockquote>
+                I believe your device has no media devices attached to.
+            </blockquote>
+        </ng-container>
+    }
+    <zxing-scanner
+        class="scanner"
+        [torch]="torchEnabled"
+        [device]="deviceCurrent"
+        (deviceChange)="onDeviceChange($event)"
+        (scanSuccess)="onCodeResult($event)"
+        [formats]="allowedFormats"
+        [tryHarder]="tryHarder"
+        (camerasFound)="onCamerasFound($event)"
+        (permissionResponse)="onHasPermission($event)"
+        (torchCompatible)="onTorchCompatible($event)"
+    />
+}
+
+<!--<section class="barcode-wrapper">
+    @if(isMobile) {
         <ng-container>
             <div class="not-mobile-container">
                 <ng-lottie [options]="options" width="200px"/>
@@ -7,39 +56,19 @@
             </div>
         </ng-container>
     } @else {
-        @if(!isLoading) {
-            @if (hasPermission === undefined) {
-                <ng-container>
-                    <h2>Waiting for permissions.</h2>
-                    <blockquote>
-                        If your device does not has cameras, no permissions will be asked.
-                    </blockquote>
-                </ng-container>
-            } @else if (hasPermission === false) {
-                <ng-container>
-                    <h2>No devices were found.</h2>
-                    <blockquote>
-                        I believe your device has no media devices attached to.
-                    </blockquote>
-                </ng-container>
-            }
-            <zxing-scanner
-                class="scanner"
-                [torch]="torchEnabled"
-                [device]="deviceCurrent"
-                (deviceChange)="onDeviceChange($event)"
-                (scanSuccess)="onCodeResult($event)"
-                [formats]="allowedFormats"
-                [tryHarder]="tryHarder"
-                (camerasFound)="onCamerasFound($event)"
-                (permissionResponse)="onHasPermission($event)"
-                (torchCompatible)="onTorchCompatible($event)"
-            />
-        } @else {
+        @if(!isLoading && productInfo == null) {
+            
+        } @else if(isLoading && productInfo == null) {
             <loading
-                text="Buscando..."
+                text="Buscando código de barras..."
                 image="searching"
             />
+        } @else if (!isLoading && !isError && productInfo != null) {
+            <div class="asd">
+                <pre>
+                    {{ productInfo | json }}
+                </pre>
+            </div>
         }
     }
-</section>
+</section>-->

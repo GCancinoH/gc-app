@@ -16,7 +16,7 @@ export class BarcodesearchService {
   searchInOpenFoodFacts(barcode: string): Observable<any> {
     return this.http.get<any>(`${this.openFoodFactsApiUrl}/${barcode}`).pipe(
       map(response => {
-        if(response.status === 1) {
+        if(response.status === 'success') {
           return response.product;
         } else {
           throw new Error('No se encontraron productos con ese código de barras');
