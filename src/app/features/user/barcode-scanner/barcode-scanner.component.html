@@ -1,5 +1,4 @@
 <p>Loading state: {{ isLoading() }}</p>
-<button (click)="searchingBarcode('3017620422003')">Click me</button>
 @if(isLoading()) {
     @defer (when isLoading) {
         <loading
@@ -16,6 +15,8 @@
     <div class="product-info">
         <pre>{{ productInfo | json }}</pre>
     </div>
+} @else if (isError) {
+
 } @else {
     <!-- Scanner and permission checks -->
     @if (hasPermission === undefined) {
@@ -39,6 +40,7 @@
         [device]="deviceCurrent"
         (deviceChange)="onDeviceChange($event)"
         (scanSuccess)="onCodeResult($event)"
+        (scanError)="onScanError($event)"
         [formats]="allowedFormats"
         [tryHarder]="tryHarder"
         (camerasFound)="onCamerasFound($event)"

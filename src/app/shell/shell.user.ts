@@ -22,6 +22,12 @@ export const USER_ROUTES: Route[] = [
         title: "Barcode Scanner | GC App",
     },
     {
+        path: 'barcode/:barcode',
+        title: 'Barcode | GC App',
+        loadComponent: () => import('../features/user/barcode/barcode.component')
+            .then(m => m.BarcodeComponent)        
+    },
+    {
         path: 'nutrition',
         loadComponent: () => import('../features/user/nutrition/nutrition.component')
             .then(m => m.NutritionComponent),

@@ -5,7 +5,7 @@ import { Observable, map } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BarcodesearchService {
+export class BarcodeSearchService {
   // injectors
   private readonly http = inject(HttpClient);
   // variables

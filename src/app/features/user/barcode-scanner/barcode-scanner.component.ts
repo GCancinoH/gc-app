@@ -3,7 +3,7 @@ import { NgFor, JsonPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // Material
 // Services
-import { BarcodesearchService } from '@domain/services/barcode-search/barcodesearch.service';
+import { BarcodeSearchService } from '@domain/services/barcode-search/barcodesearch.service';
 import { DeviceDetectorService } from '@domain/services/device-detector/device-detector.service';
 // Rxjs
 import { BehaviorSubject, finalize } from 'rxjs';
@@ -13,6 +13,7 @@ import { AnimationOptions, LottieComponent } from 'ngx-lottie';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { TranslatePipe } from '@domain/services/translator/translate.pipe';
 import { ComposeLoading } from '@compose-ui/loading/loading';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'gc-barcode-scanner',
@@ -29,8 +30,9 @@ import { ComposeLoading } from '@compose-ui/loading/loading';
 export class BarcodeScannerComponent implements OnInit {
   // injectors
   deviceDetector = inject(DeviceDetectorService);
-  barcodeSearch = inject(BarcodesearchService);
+  barcodeSearch = inject(BarcodeSearchService);
   destroyRef = inject(DestroyRef);
+  route = inject(Router);
   // signals
   isLoading = signal<boolean>(false);
   // variables
@@ -52,16 +54,24 @@ export class BarcodeScannerComponent implements OnInit {
   productInfo: any;
   // observables
   torchAvailable$ = new BehaviorSubject<boolean>(false);
-  
+  // methods
   ngOnInit(): void {
 
   }
 
+  /*
+    Fn: onCamerasFound
+      -> param: devices (MediaDeviceInfo[])
+  */
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
   }
 
+  /*
+    Fn: onDeviceSelectChange
+      -> param: selected (string)
+  */
   onDeviceSelectChange(selected: string) {
     const selectedStr = selected || '';
     if (this.deviceSelected === selectedStr) { return; }
@@ -70,6 +80,10 @@ export class BarcodeScannerComponent implements OnInit {
     this.deviceCurrent = device || undefined;
   }
 
+  /*
+    Fn: onDeviceChange
+      -> param: device (MediaDeviceInfo)
+  */
   onDeviceChange(device: MediaDeviceInfo) {
     const selectedStr = device?.deviceId || '';
     if (this.deviceSelected === selectedStr) { return; }
@@ -77,17 +91,40 @@ export class BarcodeScannerComponent implements OnInit {
     this.deviceCurrent = device || undefined;
   }
 
+  /*
+    Fn: onCodeResult
+      -> param: result (string)
+  */
   onCodeResult(result: string) {
     this.codeResult = result;
     if(this.codeResult != '') {
-      this.searchingBarcode(this.codeResult);
+      //this.searchingBarcode(this.codeResult);
+      this.route.navigate(['/barcode', this.codeResult]);
     }
   }
 
+  /*
+    Fn: onHasPermissions
+      -> param: has (boolean)
+  */
   onHasPermission(has: boolean) {
     this.hasPermission = has;
   }
 
+  /*
+    Fn: onTorchCompatible
+      -> param: isCompatible (boolean)
+  */
+  onScanError(error: Error) {
+    this.isError = true;
+    this.errorMessage = error.message;
+    this.isLoading.set(false);
+  }
+
+  /*
+    Fn: onTorchCompatible
+      -> param: isCompatible (boolean)
+  */
   onTorchCompatible(isCompatible: boolean): void {
     if (isCompatible) {
       this.torchAvailable$.next(true);
@@ -95,25 +132,5 @@ export class BarcodeScannerComponent implements OnInit {
       console.warn('Torch not compatible or available.');
       this.torchAvailable$.next(false);
     }
-  }
-
-  /* */
-  searchingBarcode(barcode: string) {
-    // Loading state to true
-    this.isLoading.set(true);
-    
-    this.barcodeSearch.searchInOpenFoodFacts(barcode).pipe(
-      takeUntilDestroyed(this.destroyRef),
-      finalize(() => {
-        this.isLoading.set(false);
-      })
-    ).subscribe({
-      next: (product) => {
-        this.productInfo = product;
-      },
-      error: (error) => {
-        console.error('Error searching product:', error);
-      }
-    });
   }
 }
