@@ -1,19 +1,17 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { NgFor, JsonPipe } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 // Material
 // Services
-import { BarcodeSearchService } from '@domain/services/barcode-search/barcodesearch.service';
 import { DeviceDetectorService } from '@domain/services/device-detector/device-detector.service';
 // Rxjs
-import { BehaviorSubject, finalize } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 // Other
 import { BarcodeFormat } from '@zxing/library';
 import { AnimationOptions, LottieComponent } from 'ngx-lottie';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { TranslatePipe } from '@domain/services/translator/translate.pipe';
 import { ComposeLoading } from '@compose-ui/loading/loading';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'gc-barcode-scanner',
@@ -30,8 +28,6 @@ import { Router } from '@angular/router';
 export class BarcodeScannerComponent implements OnInit {
   // injectors
   deviceDetector = inject(DeviceDetectorService);
-  barcodeSearch = inject(BarcodeSearchService);
-  destroyRef = inject(DestroyRef);
   route = inject(Router);
   // signals
   isLoading = signal<boolean>(false);
