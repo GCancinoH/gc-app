@@ -25,13 +25,12 @@ import { ComposeLoading } from '@compose-ui/loading/loading';
   styleUrl: './barcode-scanner.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BarcodeScannerComponent implements OnInit {
+export class BarcodeScannerComponent {
   // injectors
   deviceDetector = inject(DeviceDetectorService);
   route = inject(Router);
-  // signals
-  isLoading = signal<boolean>(false);
   // variables
+  codeResult: string = '';
   isMobile: boolean = this.deviceDetector.isMobile();
   isError: boolean = false;
   errorMessage: string = '';
@@ -39,7 +38,6 @@ export class BarcodeScannerComponent implements OnInit {
   deviceCurrent: MediaDeviceInfo | undefined;
   deviceSelected!: string;
   allowedFormats: BarcodeFormat[] = [ BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.EAN_8 ];
-  codeResult: string = '';
   hasPermission!: boolean;
   hasDevices!: boolean;
   torchEnabled = false;
@@ -50,10 +48,6 @@ export class BarcodeScannerComponent implements OnInit {
   productInfo: any;
   // observables
   torchAvailable$ = new BehaviorSubject<boolean>(false);
-  // methods
-  ngOnInit(): void {
-
-  }
 
   /*
     Fn: onCamerasFound
@@ -93,9 +87,8 @@ export class BarcodeScannerComponent implements OnInit {
   */
   onCodeResult(result: string) {
     this.codeResult = result;
-    if(this.codeResult != '') {
-      //this.searchingBarcode(this.codeResult);
-      this.route.navigate(['/barcode', this.codeResult]);
+    if(this.codeResult && this.codeResult.trim() !== '') {
+      this.route.navigate(['u/barcode', this.codeResult]);
     }
   }
 
@@ -114,7 +107,6 @@ export class BarcodeScannerComponent implements OnInit {
   onScanError(error: Error) {
     this.isError = true;
     this.errorMessage = error.message;
-    this.isLoading.set(false);
   }
 
   /*

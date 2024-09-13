@@ -1,22 +1,9 @@
-<p>Loading state: {{ isLoading() }}</p>
-@if(isLoading()) {
-    @defer (when isLoading) {
-        <loading
-            text="Buscando código de barras..."
-            image="searching"
-        />
-    }
-} @else if (isMobile) {
+<button (click)="onCodeResult('3017620422003')">Click me!</button>
+@if (!isMobile) {
     <div class="not-mobile-container">
         <ng-lottie [options]="options" width="200px"/>
         <p>{{ 'user.barcode.is-not-mobile' | translate }}</p>
     </div>
-} @else if (productInfo != null) {
-    <div class="product-info">
-        <pre>{{ productInfo | json }}</pre>
-    </div>
-} @else if (isError) {
-
 } @else {
     <!-- Scanner and permission checks -->
     @if (hasPermission === undefined) {
@@ -48,29 +35,3 @@
         (torchCompatible)="onTorchCompatible($event)"
     />
 }
-
-<!--<section class="barcode-wrapper">
-    @if(isMobile) {
-        <ng-container>
-            <div class="not-mobile-container">
-                <ng-lottie [options]="options" width="200px"/>
-                <p>{{ 'user.barcode.is-not-mobile' | translate }}</p>
-            </div>
-        </ng-container>
-    } @else {
-        @if(!isLoading && productInfo == null) {
-            
-        } @else if(isLoading && productInfo == null) {
-            <loading
-                text="Buscando código de barras..."
-                image="searching"
-            />
-        } @else if (!isLoading && !isError && productInfo != null) {
-            <div class="asd">
-                <pre>
-                    {{ productInfo | json }}
-                </pre>
-            </div>
-        }
-    }
-</section>-->
