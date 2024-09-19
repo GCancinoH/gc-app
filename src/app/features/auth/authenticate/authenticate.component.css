@@ -3,7 +3,8 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 100%
+    width: 100%;
+    background-color: #f0f0f0;
 }
 
 @media (max-width: 768px) {

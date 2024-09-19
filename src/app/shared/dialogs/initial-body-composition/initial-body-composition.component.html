@@ -1,0 +1,45 @@
+<section class="ibc-dialog-wrapper">
+    <form (ngSubmit)="saveInitialBodyCompData()">
+        @if(formStep() === 1) {
+            <h4>¿Cuál es tu edad?</h4>
+            <mat-form-field appearance="outline">
+                <mat-label>Edad</mat-label>
+                <input matInput type="number">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
+            <div class="step-buttons-wrapper">
+                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+            </div>
+        }
+        @if (formStep() === 2) {
+            <h4>¿Cuál es tu peso actual?</h4>
+            <mat-form-field appearance="outline">
+                <mat-label>Peso</mat-label>
+                <input matInput type="number">
+                <mat-icon matSuffix>monitor_weight</mat-icon>
+            </mat-form-field>
+            <div class="step-buttons-wrapper">
+                <button mat-flat-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+            </div>
+        }
+        @if (formStep() === 3) {
+            <h4>¿Cuál es tu estatura?</h4>
+            <mat-form-field appearance="outline">
+                <mat-label>Peso</mat-label>
+                <input matInput type="number">
+                <mat-icon matSuffix>height</mat-icon>
+            </mat-form-field>
+            <div class="step-buttons-wrapper">
+                <button mat-flat-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+            </div>
+        }
+        @if (formStep() === 4) {
+            <h4>¿Cuál es tu objetivo?</h4>
+        }
+        @if (formStep() === 5) {
+            <h2>¿Cuáles son las actividades que realizas diariamente?</h2>
+        }
+    </form>
+</section>

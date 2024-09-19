@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 // Material
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 // Models
 import { Product } from '@domain/models/api/openfoodfacts';
 // Services
@@ -14,6 +15,7 @@ import { PatientService } from '@domain/services/patient/patient.service';
 import { Observable, finalize } from 'rxjs';
 // Other
 import { AnimationOptions, LottieComponent } from 'ngx-lottie';
+import { InitialBodyCompositionComponent } from '@shared/dialogs/initial-body-composition/initial-body-composition.component';
 
 @Component({
   selector: 'gc-barcode',
@@ -29,6 +31,7 @@ export class BarcodeComponent implements OnInit {
   barcodeSearch = inject(BarcodeSearchService);
   barcodeAnalysis = inject(BarcodeAnalysisService);
   patientService = inject(PatientService);
+  dialogRef = inject(MatDialog);
   // signals
   isError = signal<boolean>(false);
   isLoading = signal<boolean>(false);
@@ -85,7 +88,10 @@ export class BarcodeComponent implements OnInit {
   }
 
   setInitialBodyComposition() {
-
+    this.dialogRef.open(InitialBodyCompositionComponent, {
+      width: '600px',
+      disableClose: false
+    });
   }
 
 }

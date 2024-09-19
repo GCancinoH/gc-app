@@ -1,4 +1,6 @@
 .auth-card {
+    display: flex;
+    flex-direction: row;
     width: 900px;
     height: 300px;
     padding: 0px 16px;
@@ -10,14 +12,9 @@
     width: 99%;
 }
 
-.auth-info-wrapper {
-    display: flex;
-    flex-direction: row;
-    padding: 16px 0px;
-    height: 100%;
-}
 .auth-info {
     flex: 1;
+    padding: 16px 0px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -32,10 +29,10 @@
 
 .auth-form {
     flex: 1;
+    padding: 16px 0px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    place-items: end;
+    align-items: flex-start;
 }
 .auth-signin-form {
     margin-top: auto;
@@ -67,10 +64,12 @@
 @media (max-width: 768px) {
     .auth-card {
         width: 100%;
+        height: 90%;
         display: flex;
         flex-direction: column;
-      }
-      .auth-info-wrapper { order: 1; }
-      .auth-form { order: 1; }
+    }
 
+    .auth-bottom-buttons {
+        margin-top: 20px;
+    }
 }
