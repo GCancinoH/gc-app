@@ -58,7 +58,15 @@
 .auth-text-general { color: #000 !important; }
 
 @media (max-width: 1024px) {
-    
+    auth-card {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auth-bottom-buttons {
+        margin-top: 20px;
+    }    
 }
 
 @media (max-width: 768px) {

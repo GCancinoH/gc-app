@@ -18,7 +18,7 @@
             </span>
             @if(signInStep() === 1) {
                 @defer (when signInStep() == 1) {
-                    <button mat-button class="auth-google-btn">
+                    <button mat-raised-button class="auth-google-btn">
                         <fa-icon [icon]="googleIcn" class="auth-google-icn" />
                         {{ 'auth.sign-in.continue-with-google' | translate }}
                     </button>
