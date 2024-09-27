@@ -12,6 +12,15 @@
     width: 99%;
 }
 
+.loading-state {
+    width: calc(100% - 32px);
+    height: 100%;
+    position: absolute;
+    background-color: rgba(255,255,255,0.5);
+    z-index: 10;
+    box-sizing: border-box;
+}
+
 .auth-info {
     flex: 1;
     padding: 16px 0px;

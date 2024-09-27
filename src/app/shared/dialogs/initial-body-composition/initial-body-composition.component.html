@@ -1,45 +1,61 @@
 <section class="ibc-dialog-wrapper">
-    <form (ngSubmit)="saveInitialBodyCompData()">
+    <form [formGroup]="initialBodyCompForm" (ngSubmit)="saveInitialBodyCompData()">
         @if(formStep() === 1) {
             <h4>¿Cuál es tu edad?</h4>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" gcFullWidth>
                 <mat-label>Edad</mat-label>
-                <input matInput type="number">
-                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                <input matInput type="number" formControlName="age">
+                <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+                @if (initialBodyCompForm.get('age')?.hasError('required')) {
+                    <mat-error>Este campo es requerido</mat-error>
+                }
             </mat-form-field>
             <div class="step-buttons-wrapper">
-                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+                <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>
             </div>
         }
         @if (formStep() === 2) {
             <h4>¿Cuál es tu peso actual?</h4>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" gcFullWidth>
                 <mat-label>Peso</mat-label>
                 <input matInput type="number">
-                <mat-icon matSuffix>monitor_weight</mat-icon>
+                <mat-icon matPrefix>monitor_weight</mat-icon>
             </mat-form-field>
             <div class="step-buttons-wrapper">
-                <button mat-flat-button type="button" (click)="onPreviousStep()">Anterior</button>
-                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+                <button mat-raised-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>
             </div>
         }
         @if (formStep() === 3) {
             <h4>¿Cuál es tu estatura?</h4>
-            <mat-form-field appearance="outline">
-                <mat-label>Peso</mat-label>
+            <mat-form-field appearance="outline" gcFullWidth>
+                <mat-label>Estatura</mat-label>
                 <input matInput type="number">
-                <mat-icon matSuffix>height</mat-icon>
+                <mat-icon matPrefix>height</mat-icon>
             </mat-form-field>
             <div class="step-buttons-wrapper">
-                <button mat-flat-button type="button" (click)="onPreviousStep()">Anterior</button>
-                <button mat-flat-button type="button" (click)="onNextStep()">Siguiente</button>
+                <button mat-raised-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>
             </div>
         }
         @if (formStep() === 4) {
             <h4>¿Cuál es tu objetivo?</h4>
+            <mat-form-field appearance="outline" gcFullWidth>
+                <mat-label>Objetivo</mat-label>
+                <mat-select name="objective">
+                    @for (objectives of patientObjectives; track objectives) {
+                        <mat-option [value]="objectives.value">{{objectives.viewValue}}</mat-option>
+                    }
+                </mat-select>
+                <mat-icon matPrefix materialOutlined>target</mat-icon>
+            </mat-form-field>
+            <div class="step-buttons-wrapper">
+                <button mat-raised-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>
+            </div>
         }
         @if (formStep() === 5) {
-            <h2>¿Cuáles son las actividades que realizas diariamente?</h2>
+            <h4>¿Tienes alergías?</h4>
         }
     </form>
 </section>

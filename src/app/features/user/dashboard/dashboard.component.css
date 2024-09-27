@@ -1,0 +1,15 @@
+.card-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.card-container > .spacer {
+    flex: 1 1 auto;
+}
+
+.card-container > mat-icon {
+    margin-right: 10px;
+    color: red;
+}
+

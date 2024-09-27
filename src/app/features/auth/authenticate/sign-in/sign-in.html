@@ -1,7 +1,8 @@
+@if (isLoading()) {
+    <mat-progress-bar [mode]="'query'" class="auth-progress"></mat-progress-bar>
+    <div class="loading-state"></div>        
+}
 <mat-card class="auth-card mat-elevation-z5">
-    @if (isLoading()) {
-        <mat-progress-bar [mode]="'query'" class="auth-progress"></mat-progress-bar>        
-    }
     <!-- Auth Information -->
     <div class="auth-info">
         <img src="images/logo/nut-app-logo.png" alt="Logo" width="70" />

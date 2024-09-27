@@ -1,1 +1,14 @@
-<p>dashboard works!</p>
+@if (!userHasInitialData()) {
+    @defer(when !userHasInitialData()) {
+        <mat-card appearance="outlined">
+            <mat-card-content class="card-container">
+                <mat-icon>report</mat-icon>
+                <span>No tienes aún información sobre tu composición corporal</span>
+                <span class="spacer"></span>
+                <button mat-raised-button (click)="openInitialBodyCompDialog()">Ir</button>
+            </mat-card-content>
+        </mat-card>
+    } @placeholder() {
+        <p>Loading...</p>
+    }
+}

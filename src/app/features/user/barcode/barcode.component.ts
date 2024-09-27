@@ -93,5 +93,4 @@ export class BarcodeComponent implements OnInit {
       disableClose: false
     });
   }
-
 }
