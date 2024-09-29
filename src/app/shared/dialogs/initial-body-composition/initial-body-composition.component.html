@@ -9,6 +9,9 @@
                 @if (initialBodyCompForm.get('age')?.hasError('required')) {
                     <mat-error>Este campo es requerido</mat-error>
                 }
+                @if (initialBodyCompForm.get('age')?.hasError('min')) {
+                    <mat-error>La edad mínima requerida es de 18 años.</mat-error>
+                }
             </mat-form-field>
             <div class="step-buttons-wrapper">
                 <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>

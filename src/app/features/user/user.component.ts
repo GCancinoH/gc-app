@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, Signal, inject, signal, viewChild } from '@angular/core';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AsyncPipe } from '@angular/common';
 // Material
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
@@ -8,11 +10,11 @@ import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MatBadgeModule } from '@angular/material/badge';
+// Other
 import { DeviceDetectorService } from '@domain/services/device-detector/device-detector.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { BodyCompositionSheetComponent } from '@shared/sheets/body-composition-sheet/body-composition-sheet.component';
 import { BloodPressureSheetComponent } from '@shared/sheets/blood-pressure-sheet/blood-pressure-sheet.component';
 
@@ -28,7 +30,8 @@ interface NavLinks {
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe,
     MatToolbar, MatSidenavModule, MatButton, MatFabButton, MatIcon, MatIconButton,
-    MatMenuModule, MatNavList, MatListItem, MatListItemIcon, MatListItemTitle
+    MatMenuModule, MatNavList, MatListItem, MatListItemIcon, MatListItemTitle,
+    MatBadgeModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',

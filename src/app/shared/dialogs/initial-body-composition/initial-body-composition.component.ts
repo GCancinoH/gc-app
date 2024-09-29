@@ -55,7 +55,7 @@ export class InitialBodyCompositionComponent {
 
   constructor() {
     this.initialBodyCompForm = this.fb.group({
-      age: ['', [Validators.required]],
+      age: ['', [Validators.required, Validators.min(18)]],
       weight: ['', [Validators.required]],
       height: ['', [Validators.required]],
       objetive: ['', [Validators.required]],
@@ -72,10 +72,41 @@ export class InitialBodyCompositionComponent {
     if (this.formStep() === 2 && age?.invalid) {
       this.formStep.set(this.prevStep());
       age.hasError('required');
+    } else if (this.formStep() === 2 && age?.value < 18) {
+      this.formStep.set(this.prevStep());
+      age?.hasError('min');
     }
   }
+
   onPreviousStep() { this.formStep.set(this.prevStep()); }
 
   saveInitialBodyCompData() {}
+
+  // Private methods
+  private _validateStep(step: number, form: string) {
+    const formToCheck = this.initialBodyCompForm.get(form);
+
+    switch(step) {
+      case 2:
+        if (formToCheck?.invalid && formToCheck?.hasError('required')) {
+          return;
+
+        } 
+        break;
+
+      case 3:
+        break;
+
+      case 4:
+        break;
+
+      case 5:
+        break;
+
+      case 6:
+        break;
+    }
+
+  }
 
 }
