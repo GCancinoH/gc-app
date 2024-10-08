@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, withPreloading, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -8,7 +8,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore, } from '@angular/fire/firestore';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { provideTranslations } from './domain/services/translator/translation.provider';
 import { provideLottieOptions } from 'ngx-lottie';
 
@@ -17,9 +17,14 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(
       routes,
-      withViewTransitions()
-    ), 
-    provideHttpClient(),
+      withViewTransitions(),
+    ),
+    provideHttpClient(
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN',
+      })
+    ),
     provideAnimationsAsync(),
     provideFirebaseApp(() => initializeApp(
       {

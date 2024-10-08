@@ -1,8 +1,9 @@
+<Loading [activated]="isLoading()" [loader]="'basic'" />
 <section class="ibc-dialog-wrapper">
     <form [formGroup]="initialBodyCompForm" (ngSubmit)="saveInitialBodyCompData()">
         @if(formStep() === 1) {
             <h4>¿Cuál es tu edad?</h4>
-            <mat-form-field appearance="outline" gcFullWidth>
+            <mat-form-field appearance="outline" gcFullWidth gcMargin="top, 12px">
                 <mat-label>Edad</mat-label>
                 <input matInput type="number" formControlName="age">
                 <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
@@ -21,7 +22,7 @@
             <h4>¿Cuál es tu peso actual?</h4>
             <mat-form-field appearance="outline" gcFullWidth>
                 <mat-label>Peso</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="weight">
                 <mat-icon matPrefix>monitor_weight</mat-icon>
             </mat-form-field>
             <div class="step-buttons-wrapper">
@@ -33,7 +34,7 @@
             <h4>¿Cuál es tu estatura?</h4>
             <mat-form-field appearance="outline" gcFullWidth>
                 <mat-label>Estatura</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="height">
                 <mat-icon matPrefix>height</mat-icon>
             </mat-form-field>
             <div class="step-buttons-wrapper">
@@ -45,7 +46,7 @@
             <h4>¿Cuál es tu objetivo?</h4>
             <mat-form-field appearance="outline" gcFullWidth>
                 <mat-label>Objetivo</mat-label>
-                <mat-select name="objective">
+                <mat-select name="objective" formControlName="goal">
                     @for (objectives of patientObjectives; track objectives) {
                         <mat-option [value]="objectives.value">{{objectives.viewValue}}</mat-option>
                     }
@@ -58,7 +59,66 @@
             </div>
         }
         @if (formStep() === 5) {
-            <h4>¿Tienes alergías?</h4>
+            <h4>¿Qué nivel de actividad física tienes?</h4>
+            <mat-form-field appearance="outline" gcFullWidth>
+                <mat-label>Actividad Física</mat-label>
+                <mat-select name="activity" formControlName="physicalActivity">
+                    @for (activity of patientPhysicalActivities; track activity) {
+                        <mat-option [value]="activity.value">{{activity.name}}</mat-option>
+                    }
+                </mat-select>
+                <mat-icon matPrefix materialOutlined>target</mat-icon>
+            </mat-form-field>
+            <div class="step-buttons-wrapper">
+                <button mat-raised-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="onNextStep()" primaryColor>Siguiente</button>
+            </div>
+            
+        }
+        @if (formStep() === 6) {
+            <h4>¿Tienes alergías alimentarias?</h4>
+            <mat-slide-toggle formControlName="hasAllergies" (change)="hasAllergies = $event.checked">
+                @if (initialBodyCompForm.get('hasAllergies')!.value) { 
+                    <span gcMargin="left, 8px">Sí</span> 
+                } @else { 
+                    <span gcMargin="left, 8px">No</span>  
+                }
+            </mat-slide-toggle>
+            @if (initialBodyCompForm.get('hasAllergies')!.value) {
+                <mat-form-field appearance="outline" gcFullWidth gcMargin="top, 24px">
+                    <mat-label>Tus Alergias</mat-label>
+                    <mat-chip-grid #chipGrid gcMargin="bottom, 8px">
+                        @for (allergy of initialBodyCompForm.get('allergies')?.value; track allergy) {
+                            <mat-chip-row (removed)="removeAllergy(allergy)">
+                                {{allergy}}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                        }
+                    </mat-chip-grid>
+                    <input type="text"
+                           #allergyInput
+                           placeholder="Nueva Alergia..."
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           matInput
+                           [matAutocomplete]="auto"
+                           [matChipInputFor]="chipGrid">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectAllergy($event)">
+                        @for (allergy of patientAllergies; track allergy) {
+                            <mat-option [value]="allergy.nombre">
+                                {{ allergy.nombre }}<br>
+                                <span class="aDescription">{{ allergy.descripcion }}</span>
+                            </mat-option>
+                        }
+                    </mat-autocomplete>
+                    <mat-icon matPrefix materialOutlined>allergies</mat-icon>
+                </mat-form-field>
+            }
+            <div class="step-buttons-wrapper">
+                <button mat-raised-button type="button" (click)="onPreviousStep()">Anterior</button>
+                <button mat-flat-button type="button" (click)="saveInitialBodyCompData()" primaryColor>Guardar Información</button>
+            </div> 
         }
     </form>
 </section>

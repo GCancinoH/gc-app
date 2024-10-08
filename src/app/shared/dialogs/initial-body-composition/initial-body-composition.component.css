@@ -7,3 +7,11 @@
     gap: 24px;
     margin-top: 16px;
 }
+.aDescription {
+    font-size: 11px;
+    font-style: italic;
+}
+
+.m10 {
+    margin-top: 24px;
+}
