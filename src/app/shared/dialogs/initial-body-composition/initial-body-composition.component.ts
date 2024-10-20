@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 // RxJS
 // Models
 import { Objetives } from '@domain/models/patient/data/objetives';
@@ -27,6 +29,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Firestore } from '@angular/fire/firestore';
 import { ComposeLoading } from '../../../core/components/loading/loading';
 import { FocusNextDirective } from '@domain/directives/focus-next.directive';
+import { DatePipe } from '@angular/common';
+import { DateTransformPipe } from '@domain/pipes/date-transform.pipe';
 // Others
 
 @Component({
@@ -35,10 +39,11 @@ import { FocusNextDirective } from '@domain/directives/focus-next.directive';
   imports: [
     ReactiveFormsModule,
     MatButton, MatFormFieldModule, MatInputModule, MatIcon, MatSelectModule, MatChipsModule,
-    MatAutocompleteModule, MatSlideToggleModule,
+    MatAutocompleteModule, MatSlideToggleModule, MatDatepickerModule,
     FullWidthDirective, PrimaryColorDirective, MaterialOutlinedDirective, MarginDirective,
     ComposeLoading, FocusNextDirective
   ],
+  providers: [provideNativeDateAdapter(), DateTransformPipe],
   templateUrl: './initial-body-composition.component.html',
   styleUrl: './initial-body-composition.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -58,6 +63,10 @@ export class InitialBodyCompositionComponent {
   nextStep = computed(() => this.formStep() + 1);
   prevStep = computed(() => this.formStep() - 1);
   // variables
+  private readonly _currentYear = new Date().getFullYear();
+  readonly maxDate = new Date(this._currentYear - 18, 0, 1);
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  datePipe!: DatePipe;
   hasAllergies = false;
   initialBodyCompForm: FormGroup;
   patientObjectives: Objetives[] = [
@@ -73,17 +82,20 @@ export class InitialBodyCompositionComponent {
     {name: "Muy Activa", value: 1.0},
   ];
   patientAllergies: Alergias[] = alergiasAlimenticias;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   myControl = new FormControl('');
   options: string[] = ['One', 'Two', 'Three'];
   
 
-  constructor() {
+  constructor(private dateTransform: DateTransformPipe) {
     this.initialBodyCompForm = this._fb.group({
+      birthday: ['', [Validators.required]],
       age: ['', [Validators.required, Validators.min(18)]],
       weight: ['', [Validators.required]],
       height: ['', [Validators.required]],
       goal: ['', [Validators.required]],
+      bodyFat: ['', [Validators.required]],
+      muscleMass: ['', [Validators.required]],
+      activities: ['', [Validators.required]],
       physicalActivity: ['', [Validators.required]],
       hasAllergies: [false],
       allergies: [[]]
@@ -100,17 +112,7 @@ export class InitialBodyCompositionComponent {
   }
 
   onNextStep() {
-    // variables
-    const age = this.initialBodyCompForm.get('age');
-    // set the step
     this.formStep.set(this.nextStep());
-    if (this.formStep() === 2 && age?.invalid) {
-      this.formStep.set(this.prevStep());
-      age.hasError('required');
-    } else if (this.formStep() === 2 && age?.value < 18) {
-      this.formStep.set(this.prevStep());
-      age?.hasError('min');
-    } 
   }
 
   onPreviousStep() { this.formStep.set(this.prevStep()); }
@@ -165,7 +167,27 @@ export class InitialBodyCompositionComponent {
     return this.initialBodyCompForm.get('weight')?.value / Math.pow(this.initialBodyCompForm.get('height')?.value, 2);
   }
 
+  events = signal<Date>(new Date());
+
+  addEvent(event: MatDatepickerInputEvent<Date>) {
+    if(event.value !== null) {
+      this.initialBodyCompForm.get('birthday')?.setValue(event.value);
+      const age = this._calculateAge(event.value);
+      console.log(age);
+    }
+  }
+
   // Private methods
+  private _calculateAge(birthday: Date): number {
+    const today = new Date().getFullYear();
+    let age = today - birthday.getFullYear();
+    const month = today - birthday.getMonth();
+    if (month < 0 || (month === 0 && today < birthday.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   private _validateStep(step: number, form: string) {
     const formToCheck = this.initialBodyCompForm.get(form);
 

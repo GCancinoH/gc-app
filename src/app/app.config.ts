@@ -1,5 +1,6 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withPreloading, withViewTransitions } from '@angular/router';
+import localeEs from '@angular/common/locales/es';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -11,6 +12,9 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { provideTranslations } from './domain/services/translator/translation.provider';
 import { provideLottieOptions } from 'ngx-lottie';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEs)
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,8 +25,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withXsrfConfiguration({
-        cookieName: 'XSRF-TOKEN',
-        headerName: 'X-XSRF-TOKEN',
+        cookieName: 'X-CSRFToken',
+        headerName: 'X-CSRFToken',
       })
     ),
     provideAnimationsAsync(),
@@ -45,6 +49,10 @@ export const appConfig: ApplicationConfig = {
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
     provideTranslations(),
-    provideLottieOptions({ player: () => import('lottie-web') })
+    provideLottieOptions({ player: () => import('lottie-web') }),
+    {
+      provide: LOCALE_ID,
+      useValue: 'es-MX'
+    }
   ]
 };

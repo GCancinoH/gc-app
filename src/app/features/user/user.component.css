@@ -25,7 +25,6 @@
 .bottom-sheets {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    background-color: #850000 !important;
 }
 .spacer { flex: 1 1 auto; }
 .ml8 { margin-left: 8px; }

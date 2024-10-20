@@ -1,1 +1,48 @@
-
+<section class="bcSheet-wrapper">
+    <h4>Guardar datos hoy {{ todayDate | date:'MMMM d, y' }}</h4>
+    <form [formGroup]="bodyCompForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" gcFullWidth gcMargin="bottom, 12px">
+            <mat-label>Weight</mat-label>
+            <input matInput placeholder="in kg" type="number" formControlName="weight">
+            <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+            @if(bodyCompForm.get('weight')?.hasError('required')) {
+                <mat-error>Este campo es requerido</mat-error>
+            }
+        </mat-form-field><br>
+        <mat-form-field appearance="outline" gcFullWidth gcMargin="bottom, 12px">
+            <mat-label>BMI</mat-label>
+            <input matInput placeholder="Placeholder" type="number" formControlName="bmi">
+            <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+            @if(bodyCompForm.get('bmi')?.hasError('required')) {
+                <mat-error>Este campo es requerido</mat-error>
+            }
+        </mat-form-field><br>
+        <mat-form-field appearance="outline" gcFullWidth gcMargin="bottom, 12px">
+            <mat-label>Visceral Fat</mat-label>
+            <input matInput placeholder="Placeholder" type="number" formControlName="visceralFat">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            @if(bodyCompForm.get('visceralFat')?.hasError('required')) {
+                <mat-error>Este campo es requerido</mat-error>
+            }
+        </mat-form-field><br>
+        <div class="twoInput-wrapper" gcMargin="bottom, 12px">
+            <mat-form-field appearance="outline" gcFullWidth>
+                <mat-label>Body Fat %</mat-label>
+                <input matInput placeholder="Placeholder" type="number" formControlName="bodyFat">
+                <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+                @if(bodyCompForm.get('bodyFat')?.hasError('required')) {
+                    <mat-error>Este campo es requerido</mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field appearance="outline" gcFullWidth>
+                <mat-label>Muscle Mass %</mat-label>
+                <input matInput placeholder="Placeholder" type="number" formControlName="muscleMass">
+                <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+                @if(bodyCompForm.get('muscleMass')?.hasError('required')) {
+                    <mat-error>Este campo es requerido</mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <button mat-flat-button primaryColor>Guardar Datos</button>
+    </form>
+</section>

@@ -114,7 +114,7 @@ export class UserComponent implements OnInit {
 
   openBodyCompositionSheet(): void {
     this.bottomSheet.open(BodyCompositionSheetComponent, {
-      panelClass: 'bottom-sheets'
+      panelClass: 'bottom-sheets',
     });
   }
 

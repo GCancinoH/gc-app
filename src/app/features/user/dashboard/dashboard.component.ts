@@ -7,12 +7,14 @@ import { MatDialog } from '@angular/material/dialog';
 // Services
 import { PatientService } from '@domain/services/patient/patient.service';
 import { InitialBodyCompositionComponent } from '@shared/dialogs/initial-body-composition/initial-body-composition.component';
+import { UserProgressTrackerComponent } from '@shared/user-progress-tracker/user-progress-tracker.component';
 
 @Component({
   selector: 'gc-dashboard',
   standalone: true,
   imports: [
-    MatCard, MatCardContent, MatButton, MatIcon
+    MatCard, MatCardContent, MatButton, MatIcon,
+    UserProgressTrackerComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

@@ -80,85 +80,16 @@
         </form>        
     </div>
 </mat-card>
-<!--<mat-card class="auth-card mat-elevation-z5" gcResponsive>
-    @if(isLoading()) {
-        <mat-progress-bar [mode]="'query'" class="auth-progress"></mat-progress-bar>
-    }
-    <div class="auth-info-wrapper">
-        <div class="auth-info">
-            <img src="images/logo/nut-app-logo.png" alt="Logo" width="70" />
-            <span class="auth-state">
-                @if(signInStep() === 1) {
-                    @defer (when signInStep() == 1) {
-                        {{ 'auth.sign-in.title' | translate }}
-                    }
-                } @else {
-                    @defer (when signInStep() == 2) {
-                        {{ 'auth.sign-in.welcome' | translate }} {{ patientName() }}!
-                    }
-                }
-            </span>
-            @if(signInStep() === 1) {
-                @defer (when signInStep() == 1) {
-                    <button mat-button class="auth-google-btn">
-                        <fa-icon [icon]="googleIcn" class="auth-google-icn" />
-                        {{ 'auth.sign-in.continue-with-google' | translate }}
-                    </button>
-                }
-            }
-        </div>
-                <div class="auth-form">
-                    <form [formGroup]="signinForm" class="auth-signin-form" (ngSubmit)="onSignIn()">
-                        @if (signInStep() === 1) {
-                            @defer (when signInStep() == 1) {
-                                <mat-form-field appearance="outline" class="auth-input">
-                                    <mat-label>{{ 'auth.sign-in.email-field' | translate }}</mat-label>
-                                    <input matInput placeholder="john.doe@gmail.com" formControlName="email" type="email">
-                                    <mat-icon matSuffix>alternate_email</mat-icon>
-                                </mat-form-field>
-                                <button mat-button type="button">{{ 'auth.sign-in.forgot-pass' | translate }}</button>
-                            }
-                        } @else {
-                            @defer (when signInStep() == 2) {
-                                <mat-form-field appearance="outline" class="auth-input">
-                                    <mat-label>{{ 'auth.sign-in.pass-field' | translate }}</mat-label>
-                                    <input matInput formControlName="password" [type]="signinForm.get('showPassword')?.value ? 'text' : 'password'">
-                                    <mat-icon matSuffix>lock</mat-icon>
-                                </mat-form-field>
-                                <mat-checkbox formControlName="showPassword">Show password</mat-checkbox>
-                            }
-                        }
-                        <div class="auth-bottom-buttons">
-                            @if(signInStep() === 1 ) {
-                                @defer (when signInStep() == 1) {
-                                    <button 
-                                        mat-raised-button 
-                                        class="auth-text-general"
-                                        (click)="onChangeState()"
-                                        type="button">
-                                            {{ 'auth.sign-in.create-account' | translate }}
-                                        </button>
-                                    <button
-                                        mat-flat-button 
-                                        class="auth-next-btn"
-                                        type="button"
-                                        (click)="onNext()">
-                                            {{ 'auth.sign-in.next-btn' | translate }}
-                                    </button>
-                                }
-                            } @else {
-                                @defer (when signInStep() == 2) {
-                                    <button
-                                        mat-flat-button 
-                                        class="auth-next-btn"
-                                        type="submit">
-                                            {{ 'auth.sign-in.submit-btn' | translate }}
-                                    </button>                                    
-                                }
-                            }
-                            
-                        </div>
-                    </form>
-                </div>
-            </div>
-</mat-card>-->
+<section class="auth-footer">
+    <div class="select-dropdown">
+        <select>
+            <option value="es">Español</option>"
+            <option value="en">English</option>
+        </select>
+    </div>
+    <span class="spacer"></span>
+    <div class="auth-links">
+        <a href="">Terms of Service</a>
+        <a href="">Privacy Policy</a>
+    </div>
+</section>

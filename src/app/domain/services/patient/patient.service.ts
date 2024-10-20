@@ -21,7 +21,14 @@ export class PatientService {
     const q = query(this.patientCollection, where('uid','==',patient?.uid));
     getDocs(q).then(snapshot => {
       if(!snapshot.empty) {
-        result = true;
+        const patientDoc = snapshot.docs[0];
+        const initialData = patientDoc.data()['initialData'];
+        if(initialData) {
+          result = true;
+        }
+        else {
+          result = false;
+        }
       }
     });
 

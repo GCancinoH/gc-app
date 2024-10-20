@@ -1,7 +1,7 @@
 import { DestroyRef, Injectable, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 // Angular Fire
-import { Auth, UserCredential, authState, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
+import { Auth, UserCredential, authState, idToken, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
 import { Firestore, collection, getDocs, query, where } from "@angular/fire/firestore";
 import { Patient } from "@domain/models/patient/patient.model";
 // Rxjs
@@ -17,6 +17,8 @@ export class AuthService {
   destroyRef = inject(DestroyRef);
   // Signals
   userObject = signal<Patient | null>(null);
+  idToken$ = idToken(this.auth);
+  idTokenSubscription!: Subscription;
   // Observables
   authState$ = authState(this.auth);
   user$ = Subscription;
@@ -37,16 +39,37 @@ export class AuthService {
   }
 
   checkIfTheEmailExistsInDB(email: string | null): Observable<boolean> {
-    return this.getUserFromLocalStorage().pipe(
-      switchMap(cachedData => {
-        if (cachedData && cachedData.email === email) {
-          this.userObject.set(cachedData); // Set the user object (doesn't return anything)
-          return of(true); // Emit true to signal email exists
+    return from(getDocs(query(this.patientsCollection, where('email', '==', email)))).pipe(
+      map(snapshot => {
+        if (!snapshot.empty) {
+          const patientDoc = snapshot.docs[0];
+          const cachedData = localStorage.getItem('currentUser');
+          if (cachedData && JSON.parse(cachedData).email === email) {
+            this.userObject.set(JSON.parse(cachedData));
+            return true;
+          } else {
+            this.saveUserIntoLocalDB(patientDoc.data() as Patient);
+            return true;
+          }
         } else {
-          return this.getUserFromFirestore(email); // Forward the existing observable
+          return false;
         }
+      }),
+      catchError(error => {
+        console.error('Error checking if email exists:', error);
+        return of(false);
       })
     );
+  }
+  
+
+  fetchPatientToken() : Observable<string | null>
+  {
+    return this.idToken$.pipe(
+      map(token => {
+        return token;
+      })
+    )
   }
 
   signOut() : Observable<boolean>
@@ -59,27 +82,27 @@ export class AuthService {
     )
   }
 
+
   private getUserFromLocalStorage() : Observable<Patient | null>
   {
     const cachedData = localStorage.getItem('currentUser');
     return cachedData ? of(JSON.parse(cachedData)) : of(null);
   }
 
-  private getUserFromFirestore(email: string | null) : Observable<boolean>
-  {
+  private getUserFromFirestore(email: string | null): Observable<Patient | null> {
     const q = query(this.patientsCollection, where('email', '==', email));
-    
+  
     return from(getDocs(q)).pipe(
       map(snapshot => {
-        if(!snapshot.empty) {
+        if (!snapshot.empty) {
           const userData = snapshot.docs[0].data() as Patient;
           this.saveUserIntoLocalDB(userData);
-          return true;
+          return userData; // Return the actual Patient data
         } else {
-          return false;
+          return null; // Return null if user not found
         }
       })
-    )
+    );
   }
 
   private saveUserIntoLocalDB(user: Patient)
