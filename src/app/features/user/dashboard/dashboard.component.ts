@@ -14,7 +14,7 @@ import { UserProgressTrackerComponent } from '@shared/user-progress-tracker/user
   standalone: true,
   imports: [
     MatCard, MatCardContent, MatButton, MatIcon,
-    UserProgressTrackerComponent
+    UserProgressTrackerComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

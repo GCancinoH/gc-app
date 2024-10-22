@@ -75,14 +75,30 @@ export class AuthService {
   signOut() : Observable<boolean>
   {
     return from(signOut(this.auth)).pipe(
-      map(() => {
-        this.removeUserFromLocalDB();
-        return true
+      tap(() => {
+        this.removeUserFromLocalDB()
+      }),
+      map(() => true),
+      catchError(error => {
+        console.error('Error signing out:', error);
+        return of(false);
       })
     )
   }
 
+  fetchUser(email: string): Observable<Patient | null> {
+    return this.getUserFromLocalStorage().pipe(
+      switchMap(cachedUser => {
+        if (cachedUser) {
+          return of(cachedUser);
+        } else {
+          return this.getUserFromFirestore(email);
+        }
+      })
+    );
+  }
 
+  // Private
   private getUserFromLocalStorage() : Observable<Patient | null>
   {
     const cachedData = localStorage.getItem('currentUser');

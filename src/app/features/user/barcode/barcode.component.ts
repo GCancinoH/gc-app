@@ -15,7 +15,7 @@ import { PatientService } from '@domain/services/patient/patient.service';
 import { Observable, finalize } from 'rxjs';
 // Other
 import { AnimationOptions, LottieComponent } from 'ngx-lottie';
-import { InitialBodyCompositionComponent } from '@shared/dialogs/initial-body-composition/initial-body-composition.component';
+
 
 @Component({
   selector: 'gc-barcode',
@@ -87,10 +87,10 @@ export class BarcodeComponent implements OnInit {
     });
   }
 
-  setInitialBodyComposition() {
+  /*setInitialBodyComposition() {
     this.dialogRef.open(InitialBodyCompositionComponent, {
       width: '600px',
       disableClose: false
     });
-  }
+  }*/
 }

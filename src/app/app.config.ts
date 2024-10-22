@@ -12,6 +12,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { provideTranslations } from './domain/services/translator/translation.provider';
 import { provideLottieOptions } from 'ngx-lottie';
+import { provideToastr } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 
 registerLocaleData(localeEs)
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideAnimationsAsync(),
+    provideToastr(),
     provideFirebaseApp(() => initializeApp(
       {
         "projectId":"genarocancino-369",

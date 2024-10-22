@@ -15,3 +15,12 @@
 .m10 {
     margin-top: 24px;
 }
+.activity-container {
+    display: flex;
+    flex-direction: column;
+}
+.activity-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

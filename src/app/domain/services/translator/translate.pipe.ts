@@ -7,10 +7,18 @@ import { TranslationService } from './translation.service';
   pure: false // Set to false to update translations when language changes
 })
 export class TranslatePipe implements PipeTransform {
+  // injectors
   translationService = inject(TranslationService);
 
   transform(key: string, ...args: any[]): string {
-    const translation = this.translationService.getTranslation(key);
+    let translation!: string;
+    
+    if(key.includes("CATEGORY_")) {
+      translation = this.translationService.getTranslation(`user.progress.category.${key}`);
+    } else {
+      translation = this.translationService.getTranslation(key);
+    }
+    // const translation = this.translationService.getTranslation(key);
     if (args.length) {
       return this.interpolate(translation, args);
     }

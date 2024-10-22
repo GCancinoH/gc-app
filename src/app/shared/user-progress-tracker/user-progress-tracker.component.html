@@ -1,10 +1,14 @@
 <section class="progress-wrapper">
     <div class="tracker-wrapper">
-        <span class="tracker-lvl">Beginner | Lvl 1</span>
+        <span class="tracker-lvl">
+            {{ patientProgress()!.currentCategory | translate }} | Lvl {{ patientProgress()?.level }}
+        </span>
         <div class="progress-bar">
-            <div class="progress" [style.width]="50 + '%'">
+            <div class="progress" [style.width]="progressPercentage() + '%'">
             </div>
         </div>
-        <span class="tracker-progress-text">0/250</span>
+        <span class="tracker-progress-text">
+            {{ patientProgress()?.exp }}/{{ nextLevelExp() }}
+        </span>
     </div>
 </section>

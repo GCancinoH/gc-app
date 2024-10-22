@@ -31,6 +31,7 @@ import { ComposeLoading } from '../../../core/components/loading/loading';
 import { FocusNextDirective } from '@domain/directives/focus-next.directive';
 import { DatePipe } from '@angular/common';
 import { DateTransformPipe } from '@domain/pipes/date-transform.pipe';
+import { withHttpTransferCacheOptions } from '@angular/platform-browser';
 // Others
 
 @Component({
@@ -86,7 +87,7 @@ export class InitialBodyCompositionComponent {
   options: string[] = ['One', 'Two', 'Three'];
   
 
-  constructor(private dateTransform: DateTransformPipe) {
+  constructor() {
     this.initialBodyCompForm = this._fb.group({
       birthday: ['', [Validators.required]],
       age: ['', [Validators.required, Validators.min(18)]],
@@ -95,7 +96,8 @@ export class InitialBodyCompositionComponent {
       goal: ['', [Validators.required]],
       bodyFat: ['', [Validators.required]],
       muscleMass: ['', [Validators.required]],
-      activities: ['', [Validators.required]],
+      activities: this._fb.array([]),
+      visceralFat: ['', Validators.required],
       physicalActivity: ['', [Validators.required]],
       hasAllergies: [false],
       allergies: [[]]
@@ -109,6 +111,9 @@ export class InitialBodyCompositionComponent {
         this.initialBodyCompForm.get('allergies')?.setValue([]);
       }
     });
+
+    // Add an activity
+    this.addActivity();
   }
 
   onNextStep() {
@@ -122,32 +127,32 @@ export class InitialBodyCompositionComponent {
     const patient = JSON.parse(localStorage.getItem('currentUser')!);
     const todayDate = new Date();
     const data = {
-      uid: patient.uid,
-      date: todayDate,
+      birthday: this.initialBodyCompForm.get('birthday')?.value,
       age: this.initialBodyCompForm.get('age')?.value,
-      initialWeight: this.initialBodyCompForm.get('weight')?.value,
-      initialHeight: this.initialBodyCompForm.get('height')?.value,
-      initialBMI: this._calculateBMI(),
-      goal: this.initialBodyCompForm.get('goal')?.value,
+      height: this.initialBodyCompForm.get('height')?.value,
       physicalActivity: this.initialBodyCompForm.get('physicalActivity')?.value,
-      allergies: this.initialBodyCompForm.get('allergies')?.value
+      activities: this.initialBodyCompForm.get('activities')?.value,
+      allergies: this.initialBodyCompForm.get('allergies')?.value,
+      initialData: {
+        weight: this.initialBodyCompForm.get('weight')?.value,
+        goal: this.initialBodyCompForm.get('goal')?.value,
+        bodyFat: this.initialBodyCompForm.get('bodyFat')?.value,
+        muscleMass: this.initialBodyCompForm.get('muscleMass')?.value,
+        visceralFat: this.initialBodyCompForm.get('visceralFat')?.value,
+        date: todayDate
+      }
     }
-
-    console.log(data);
-    //this.isLoading.set(false);
-
-    /* const initDataCol = collection(this._db, 'initialDataPatients');
-    const initDataDoc = addDoc(initDataCol, data);
-    initDataDoc.then(docRef => {
-      console.log('Document written with ID: ', docRef.id);
-    })
-    .catch(error => {
-      console.error('Error adding document: ', error);
-    }); */
-    
   }
 
   get activities() { return this.initialBodyCompForm.get('activities') as FormArray; }
+
+  addActivity(): void {
+    const activityForm = this._fb.group({
+      name: [''],
+      duration: ['']
+    });
+    this.activities.push(activityForm);
+  }
 
   selectAllergy(event: MatAutocompleteSelectedEvent): void {
     const value = event.option.value;

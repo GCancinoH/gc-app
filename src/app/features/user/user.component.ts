@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AsyncPipe } from '@angular/common';
 // Material
@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime } from 'rxjs';
 import { BodyCompositionSheetComponent } from '@shared/sheets/body-composition-sheet/body-composition-sheet.component';
 import { BloodPressureSheetComponent } from '@shared/sheets/blood-pressure-sheet/blood-pressure-sheet.component';
+import { AuthService } from '@domain/services/auth/auth.service';
 
 interface NavLinks {
   name: string;
@@ -44,6 +45,8 @@ export class UserComponent implements OnInit {
   device = inject(DeviceDetectorService);
   destroyRef = inject(DestroyRef);
   bottomSheet = inject(MatBottomSheet);
+  authService = inject(AuthService);
+  private readonly _router = inject(Router);
   // inputs, outputs, viewchilds, etc
   drawerEl = viewChild<MatDrawer>('drawer');
   // signals
@@ -109,6 +112,18 @@ export class UserComponent implements OnInit {
           return;
         }
       }      
+    });
+  }
+
+  userSignOut(): void {
+    this.authService.signOut().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(sucess => {
+      if(sucess) {
+        this._router.navigate(['/auth']);        
+      } else {
+        console.log('Error signing out');
+      }
     });
   }
 
