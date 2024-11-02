@@ -15,5 +15,6 @@ export class PrimaryColorDirective {
 
   private setFullWidth() {
     this.render.setStyle(this.el.nativeElement,'background-color','#850000');
+    this.render.setStyle(this.el.nativeElement,'color','#fff');
   }
 }

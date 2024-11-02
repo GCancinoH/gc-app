@@ -1,37 +1,40 @@
-import { Component, inject, signal, computed, ChangeDetectionStrategy, DestroyRef, model } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy, DestroyRef, model, effect } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpClient } from '@angular/common/http';
 // Firebase
+import { Firestore } from '@angular/fire/firestore';
 import { Timestamp, addDoc, collection } from '@angular/fire/firestore';
 // Material
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIcon, MatIconRegistry } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDialogRef } from '@angular/material/dialog';
 // RxJS
+import { tap } from 'rxjs';
 // Models
 import { Objetives } from '@domain/models/patient/data/objetives';
+import { PhysicalActivity } from '@domain/models/patient/data/physicalActivities';
+import { Alergias, alergiasAlimenticias } from '@domain/models/patient/data/alergies';
 // Services
+import { ProgressService } from '@domain/services/progress/progress.service';
+import { NotificationService } from '@domain/services/notification/notification.service';
 // Directives
 import { PrimaryColorDirective } from '@domain/directives/primary-color.directive';
 import { FullWidthDirective } from '@domain/directives/full-width.directive';
 import { MaterialOutlinedDirective } from '@domain/directives/material-outlined.directive';
 import { MarginDirective } from '@domain/directives/margin.directive';
-import { PhysicalActivity } from '@domain/models/patient/data/physicalActivities';
-import { Alergias, alergiasAlimenticias } from '@domain/models/patient/data/alergies';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Firestore } from '@angular/fire/firestore';
 import { ComposeLoading } from '../../../core/components/loading/loading';
-import { FocusNextDirective } from '@domain/directives/focus-next.directive';
-import { DatePipe } from '@angular/common';
-import { DateTransformPipe } from '@domain/pipes/date-transform.pipe';
-import { withHttpTransferCacheOptions } from '@angular/platform-browser';
+import { ApiService, HeaderValues } from '@domain/services/api/api.service';
+import { AuthService } from '@domain/services/auth/auth.service';
 // Others
 
 @Component({
@@ -40,11 +43,11 @@ import { withHttpTransferCacheOptions } from '@angular/platform-browser';
   imports: [
     ReactiveFormsModule,
     MatButton, MatFormFieldModule, MatInputModule, MatIcon, MatSelectModule, MatChipsModule,
-    MatAutocompleteModule, MatSlideToggleModule, MatDatepickerModule,
+    MatAutocompleteModule, MatSlideToggleModule, MatDatepickerModule, MatIconButton,
     FullWidthDirective, PrimaryColorDirective, MaterialOutlinedDirective, MarginDirective,
-    ComposeLoading, FocusNextDirective
+    ComposeLoading
   ],
-  providers: [provideNativeDateAdapter(), DateTransformPipe],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './initial-body-composition.component.html',
   styleUrl: './initial-body-composition.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -53,12 +56,18 @@ export class InitialBodyCompositionComponent {
   // injectors
   private readonly _fb = inject(FormBuilder);
   private readonly _destroyRef = inject(DestroyRef);
-  private readonly _db = inject(Firestore);
+  private readonly _progressService = inject(ProgressService);
+  private readonly _notificationService = inject(NotificationService);
+  private readonly _apiService = inject(ApiService);
+  private readonly _authService = inject(AuthService);
+  private readonly _dialogRef = inject(MatDialogRef);
   // signals
   formStep = signal<number>(1);
   allergies = signal<string[]>([]);
   currentAllergy = model('');
   isLoading = signal<boolean>(false);
+  tokenFromServer = signal<string>('');
+  patientIDToken = signal<string>('');
   // observables
   // computed
   nextStep = computed(() => this.formStep() + 1);
@@ -67,7 +76,6 @@ export class InitialBodyCompositionComponent {
   private readonly _currentYear = new Date().getFullYear();
   readonly maxDate = new Date(this._currentYear - 18, 0, 1);
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  datePipe!: DatePipe;
   hasAllergies = false;
   initialBodyCompForm: FormGroup;
   patientObjectives: Objetives[] = [
@@ -85,6 +93,7 @@ export class InitialBodyCompositionComponent {
   patientAllergies: Alergias[] = alergiasAlimenticias;
   myControl = new FormControl('');
   options: string[] = ['One', 'Two', 'Three'];
+  backendUrl = 'https://gc-nutrition.vercel.app/'
   
 
   constructor() {
@@ -100,7 +109,20 @@ export class InitialBodyCompositionComponent {
       visceralFat: ['', Validators.required],
       physicalActivity: ['', [Validators.required]],
       hasAllergies: [false],
-      allergies: [[]]
+      allergies: [[]],
+    });
+
+    this._authService.fetchPatientToken().pipe(
+      takeUntilDestroyed(this._destroyRef)
+    ).subscribe(idToken => {
+      if(idToken)
+        this.patientIDToken.set(idToken);
+      // Get the token
+      this._apiService.fetchCSRFToken(idToken).subscribe(token => {
+        if(token) {
+          this.tokenFromServer.set(token); 
+        }     
+      });
     });
 
     // Listen to the toggle
@@ -123,10 +145,11 @@ export class InitialBodyCompositionComponent {
   onPreviousStep() { this.formStep.set(this.prevStep()); }
 
   saveInitialBodyCompData() {
-    this.isLoading.set(true);
+    this.isLoading.update(() => true);
     const patient = JSON.parse(localStorage.getItem('currentUser')!);
     const todayDate = new Date();
     const data = {
+      uid: patient.uid,
       birthday: this.initialBodyCompForm.get('birthday')?.value,
       age: this.initialBodyCompForm.get('age')?.value,
       height: this.initialBodyCompForm.get('height')?.value,
@@ -142,6 +165,23 @@ export class InitialBodyCompositionComponent {
         date: todayDate
       }
     }
+    const headerValues: HeaderValues = {
+      'csrf_token': this.tokenFromServer(),
+      'auth_token': this.patientIDToken()
+    }
+    
+    this._apiService.saveInitialData(headerValues, data).subscribe(r => {
+      console.log(r.message);
+      this.isLoading.update(() => false);
+      this._dialogRef.close();
+    });
+
+    /*this._progressService.updateProgress(10).pipe(
+      tap((progress) => {
+        this._notificationService.showToastrNotification("Hola", "", "success");
+      })
+    )*/
+    
   }
 
   get activities() { return this.initialBodyCompForm.get('activities') as FormArray; }
@@ -178,7 +218,7 @@ export class InitialBodyCompositionComponent {
     if(event.value !== null) {
       this.initialBodyCompForm.get('birthday')?.setValue(event.value);
       const age = this._calculateAge(event.value);
-      console.log(age);
+      this.initialBodyCompForm.get('age')?.setValue(age);
     }
   }
 

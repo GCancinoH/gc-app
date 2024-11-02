@@ -26,12 +26,12 @@ import { AnimationOptions, LottieComponent } from 'ngx-lottie';
 })
 export class BarcodeComponent implements OnInit {
   // injectors
-  activeRoute = inject(ActivatedRoute);
-  destroyRef = inject(DestroyRef);
-  barcodeSearch = inject(BarcodeSearchService);
-  barcodeAnalysis = inject(BarcodeAnalysisService);
-  patientService = inject(PatientService);
-  dialogRef = inject(MatDialog);
+  private readonly _activeRoute = inject(ActivatedRoute);
+  private readonly _destroyRef = inject(DestroyRef);
+  private readonly _barcodeSearch = inject(BarcodeSearchService);
+  private readonly _barcodeAnalysis = inject(BarcodeAnalysisService);
+  private readonly _patientService = inject(PatientService);
+  private readonly _dialogRef = inject(MatDialog);
   // signals
   isError = signal<boolean>(false);
   isLoading = signal<boolean>(false);
@@ -46,30 +46,36 @@ export class BarcodeComponent implements OnInit {
 
   // methods
   ngOnInit(): void {
-    this.activeRoute.paramMap.pipe(
-      takeUntilDestroyed(this.destroyRef)
+    this._activeRoute.paramMap.pipe(
+      takeUntilDestroyed(this._destroyRef)
     ).subscribe(params => {
       this.barcode.set(params.get('barcode')!);
       this.searchBarcode(this.barcode());
     });
+
+    this._patientService.doesPatientHasInitialData().pipe(
+      takeUntilDestroyed(this._destroyRef)
+    ).subscribe(hasInitialData => {
+      if(hasInitialData)
+        this.isUserHasInitialData.set(hasInitialData);
+    })
   }
 
   searchBarcode(barcode: string) {
     // Initialize Loading
     this.isLoading.set(true);
     // Look if user has initial data
-    this.isUserHasInitialData.set(this.patientService.doesPatientHasInitialData());
     if (!this.isUserHasInitialData()) {
       this.isLoading.set(false);
       this.isErrorInitialData.set(true);
       return;
     }
     // Search in API or Database
-    this.barcodeSearch.searchingBarcode(barcode).pipe(
+    this._barcodeSearch.searchingBarcode(barcode).pipe(
       finalize(() => {
         this.isLoading.set(false);
       }),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this._destroyRef)
     ).subscribe({
       next: (product: Product) => {
         const p: Product = {

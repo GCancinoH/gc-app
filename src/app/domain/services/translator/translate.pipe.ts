@@ -15,6 +15,8 @@ export class TranslatePipe implements PipeTransform {
     
     if(key.includes("CATEGORY_")) {
       translation = this.translationService.getTranslation(`user.progress.category.${key}`);
+    } else if(key.includes("STRENGTH_")) {
+      translation = this.translationService.getTranslation(`user.quests.strength.${key}`);
     } else {
       translation = this.translationService.getTranslation(key);
     }

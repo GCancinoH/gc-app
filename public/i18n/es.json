@@ -31,6 +31,21 @@
         "CATEGORY_INTERMEDIATE": "Intermedio",
         "CATEGORY_ADVANCED": "Avanzado"
       }
+    },
+    "quests": {
+      "menu": {
+        "title": "Pruebas Diarias"
+      },
+      "dialog": {
+        "buttons": {
+          "cancel": "Cancelar",
+          "start": "¡Empezar!"
+        }
+      },
+      "strength": {
+        "STRENGTH_QUEST": "Desafio de Fuerza",
+        "STRENGTH_QUEST_DESCRIPTION": "Este desafio te llevará "
+      }
     }
   }
 }

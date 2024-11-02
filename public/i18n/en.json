@@ -24,6 +24,15 @@
   "user": {
     "barcode": {
       "is-not-mobile": "This feature is only available in mobile devices."
+    },
+    "quests": {
+      "menu": {
+        "title": "Pruebas Diarias"
+      },
+      "strength": {
+        "STRENGTH_QUEST": "Strength Quest",
+        "STRENGTH_QUEST_DESCRIPTION": "Become Stronger"
+      }
     }
   }
 }

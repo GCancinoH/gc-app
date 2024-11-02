@@ -10,16 +10,16 @@ type NotificationType = 'success' | 'info' | 'warning' | 'error';
 })
 export class NotificationService {
   // injectors
-  snackbar = inject(MatSnackBar);
-  translator = inject(TranslationService);
+  private readonly _snackbar = inject(MatSnackBar);
+  private readonly _translator = inject(TranslationService);
   private readonly _toastr = inject(ToastrService);
 
   constructor() { }
   showMessage(text: string, duration?: number) {
-    this.snackbar.open(text, "Close", {duration: duration});
+    this._snackbar.open(text, "Close", {duration: duration});
   }
 
-  showToastrNotification(title: string, message: string, type: NotificationType = 'success')
+  showToastrNotification(message: string, title?: string, type?: NotificationType)
   {
     switch(type) {
       case 'success':

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, getDocs, query, snapToData, where } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, onSnapshot, query, snapToData, where } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
@@ -13,28 +13,26 @@ export class PatientService {
   // signals
   // variables
   private readonly patientCollection = collection(this.db, 'initialBodyComp');
-
-  doesPatientHasInitialData(): boolean
-  {
-    let result = false;
-    const patient = this.authSrv.getUserFromLocalDB();
-    const q = query(this.patientCollection, where('uid','==',patient?.uid));
-    getDocs(q).then(snapshot => {
-      if(!snapshot.empty) {
-        const patientDoc = snapshot.docs[0];
-        const initialData = patientDoc.data()['initialData'];
-        if(initialData) {
-          result = true;
-        }
-        else {
-          result = false;
-        }
-      }
-    });
-
-    return result;
-  }
-
   //methods
   constructor() { }
+
+  doesPatientHasInitialData(): Observable<boolean>
+  {
+    const patient = this.authSrv.getUserFromLocalDB();
+    const q = query(this.patientCollection, where('uid', '==', patient?.uid));
+
+    return new Observable<boolean>((observer) => {
+      onSnapshot(q, (snapshot) => {
+        if(!snapshot.empty) {
+          const patientDoc = snapshot.docs[0];
+          const initialData = patientDoc.data()['initialData'];
+          observer.next(!!initialData);
+        } else {
+          observer.next(false);
+        }
+      }, (error) => {
+        observer.error(error);
+      })
+    })
+  }
 }

@@ -71,9 +71,10 @@ export class ProgressService {
       throw new Error('User progress not found');
 
     const updatedProgress = this._calculateNewProgress(currentProgress, expGained);
+    console.log("Update progress: ", updatedProgress);
 
     this.userProgress.set(updatedProgress);
-    return of(this.userProgress())
+    return of(this.userProgress());
   }
 
   private _calculateNewProgress(currentProgress: PatientProgress | null, expGained: number): PatientProgress | null

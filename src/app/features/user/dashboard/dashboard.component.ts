@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // Material
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
@@ -21,15 +22,21 @@ import { UserProgressTrackerComponent } from '@shared/user-progress-tracker/user
 })
 export class DashboardComponent implements OnInit {
   // injectors
-  dialogRef = inject(MatDialog);
+  private readonly dialogRef = inject(MatDialog);
+  private readonly _destroyRef = inject(DestroyRef);
   // services
-  patientService = inject(PatientService);
+  private readonly patientService = inject(PatientService);
   // observables  
   // signals
   userHasInitialData = signal<boolean>(false);
 
   ngOnInit(): void {
-    this.userHasInitialData.set(this.patientService.doesPatientHasInitialData());    
+    this.patientService.doesPatientHasInitialData().pipe(
+      takeUntilDestroyed(this._destroyRef)
+    ).subscribe((hasInitialData) => {
+      if(hasInitialData)
+        this.userHasInitialData.set(hasInitialData);
+    })
   }
 
   openInitialBodyCompDialog() {

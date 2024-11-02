@@ -1,0 +1,12 @@
+<button mat-icon-button [mat-menu-trigger-for]="questMenu">
+    <mat-icon svgIcon="quests" [matBadge]="quests().length" matBadgeSize="small" aria-hidden="false"></mat-icon>
+</button>
+<mat-menu #questMenu="matMenu" xPosition="before">
+    <p class="menu-title">{{ 'user.quests.menu.title' | translate }}</p>
+    @for(quest of quests$ | async; track quest.questID) {
+        <button mat-menu-item (click)="openQuest(quest.questID)">
+            <mat-icon>chevron_right</mat-icon>
+            {{ quest.name | translate }}
+        </button>
+    }
+</mat-menu>

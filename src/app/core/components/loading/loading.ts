@@ -15,6 +15,4 @@ export class ComposeLoading
 {
   loader = input<Loaders>('basic');
   styles = input<Styles>();
-  activated = input<boolean>(false);
-
 }

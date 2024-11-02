@@ -1,0 +1,23 @@
+.quest-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+.quest-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 400;
+    margin-left: 16px;
+}
+h3 {
+    font-size: 1rem;
+    line-height: 1.25rem;
+    letter-spacing: .016rem;
+    font-weight: bold;
+}
+p {
+    font-size: .900rem;
+    text-align: justify;
+}

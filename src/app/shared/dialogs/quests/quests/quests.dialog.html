@@ -1,0 +1,90 @@
+<div class="quest-header">
+    @if (quest().type === 'STRENGHT') {
+        <img src="images/svg/strength_quest.svg" width="25px" alt="Strength Quest" >
+    }
+    <span class="quest-title">{{ quest().name | translate }}</span>
+    <span style="flex: 1 1 auto"></span>
+    <button mat-icon-button>
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+@if(!isStarted()) {
+<mat-dialog-content class="mat-typography">
+    <h3>Quest Description</h3>
+    <p>Strength is forged one rep at a time. Embark on this challenge to push the limits of your body’s power and build resilience that rivals the strongest warriors. Completing these exercises will not only build raw strength but also increase your endurance and mental fortitude. Stay focused and conquer this quest daily to boost your progress, earn valuable XP, and take another step toward your peak potential."</p>
+    <div gcMargin="bottom, 24px"></div>
+    <h3>Objectives</h3>
+    <p><b>Push-Ups:</b> Complete X push-ups, focusing on controlled movements to engage your chest, triceps, and core.</p>
+    <p><b>Squats:</b> Execute Y squats, with proper form to build your lower body strength and stability.</p>
+    <p><b>Crunches:</b> Finish Z crunches, targeting your core muscles to enhance stability and endurance.</p>
+    <p><b>Pull-Ups/Chin-Ups:</b> Accomplish W pull-ups/chin-ups to develop your upper body strength and grip.</p>
+    <div gcMargin="bottom, 24px"></div>
+    <h3>Requirements</h3>
+    <p><b><i>Rest:</i></b> Take breaks between exercises if needed, but challenge yourself to complete each exercise.</p>
+    <p><b><i>Form:</i></b> Maintain good posture and form for maximum benefit and to avoid injury. </p>
+    <div gcMargin="bottom, 24px"></div>
+    <h3>Rewards</h3>
+    <p><b><i>XP:</i></b> Gain experience points upon completion.</p>
+    <p><b><i>Attribute Points:</i></b> Add points to your Strength and Endurance stats.</p>
+    <p><b><i>Bonus Points:</i></b> Receive extra points if you surpass the required reps.</p>
+    <div gcMargin="bottom, 24px"></div>
+    <h3>Difficulty</h3>
+    <p><b><i>Adaptive:</i></b> The number of reps will scale with your level and progress to ensure a continuous challenge.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'user.quests.dialog.buttons.cancel' | translate }}</button>
+    <button mat-button cdkFocusInitial (click)="startQuest()">{{ 'user.quests.dialog.buttons.start' | translate }}</button>
+</mat-dialog-actions>
+} @else {
+    <mat-dialog-content class="mat-typography">
+        <p>{{ formatTime(elapsedTime) }} seconds</p>
+        <mat-selection-list #details (selectionChange)="onSelectedOption($event)">
+            @for (detail of detailsToBeDone(); track detail) {
+            <mat-list-option>
+                <span matListItemTitle>{{ detail.exercise }}</span>
+                @if(detail.reps == 0) {
+                    <span matListItemLine>{{ detail.km }} km</span>
+                } @else {
+                    <span matListItemLine>{{ detail.reps }} reps.</span>
+                }
+            </mat-list-option>
+            }
+        </mat-selection-list>      
+    </mat-dialog-content>
+    @defer(when isDisabled()) {
+        <mat-dialog-actions>
+            <button mat-button gcFullWidth primaryColor (click)="finishQuest()">
+                ¡Terminar!
+            </button>
+        </mat-dialog-actions>
+    }
+    
+}   
+<!--@if(quest()) {
+    <section class="quest-wrapper">
+        <div class="quest-header">
+            <img src="images/svg/strength_quest.svg" width="100px" alt="Strength Quest" >
+            <h2>{{ quest().name | translate }}</h2>
+        </div>
+        <mat-dialog-content class="mat-typography">
+            <h3>Quest Description</h3>
+            <p>"Strength is forged one rep at a time. Embark on this challenge to push the limits of your body’s power and build resilience that rivals the strongest warriors. Completing these exercises will not only build raw strength but also increase your endurance and mental fortitude. Stay focused and conquer this quest daily to boost your progress, earn valuable XP, and take another step toward your peak potential."</p>
+            <h3>Objectives</h3>
+            Push-Ups: Complete X push-ups, focusing on controlled movements to engage your chest, triceps, and core.
+            Squats: Execute Y squats, with proper form to build your lower body strength and stability.
+            Crunches: Finish Z crunches, targeting your core muscles to enhance stability and endurance.
+            Pull-Ups/Chin-Ups: Accomplish W pull-ups/chin-ups to develop your upper body strength and grip.
+            <h3>Requirements</h3>
+            Rest: Take breaks between sets if needed, but challenge yourself to complete each exercise.
+            Form: Maintain good posture and form for maximum benefit and to avoid injury.
+            <h3>Rewards</h3>
+            XP: Gain rewardXP upon completion.
+            Attribute Points: Add points to your Strength and Endurance stats.
+            Bonus Points: Receive extra points if you surpass the required reps.
+            <h3>Difficulty</h3>
+            <p>Adaptive – The number of reps will scale with your level and progress to ensure a continuous challenge.</p>
+            <h3>Motivation</h3>
+            <p>Push beyond yesterday’s limits. Strength isn’t just built in your muscles—it’s built in your mind. Prove your resolve, level up, and show what you’re made of."</p>
+        </mat-dialog-content>
+    </section>
+}-->
