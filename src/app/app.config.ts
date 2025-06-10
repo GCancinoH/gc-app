@@ -34,13 +34,13 @@ export const appConfig: ApplicationConfig = {
     provideToastr(),
     provideFirebaseApp(() => initializeApp(
       {
-        "projectId":"genarocancino-369",
-        "appId":"1:35508774182:web:cbcfdf494e8f6484f34de7",
-        "storageBucket":"genarocancino-369.appspot.com",
-        "apiKey":"AIzaSyD3x2cgJ3eGJ4kaAXnmKUw2x6x5yqv0Z9s",
-        "authDomain":"genarocancino-369.firebaseapp.com",
-        "messagingSenderId":"35508774182",
-        "measurementId":"G-YM98FHYQH7"
+        "projectId":"",
+        "appId":"",
+        "storageBucket":"",
+        "apiKey":"",
+        "authDomain":"",
+        "messagingSenderId":"",
+        "measurementId":""
       }
     )),
     provideAuth(() => getAuth()),
